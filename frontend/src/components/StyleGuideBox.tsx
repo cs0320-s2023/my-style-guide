@@ -1,11 +1,13 @@
-import React, {useEffect, useRef, useState} from "react";
-import "mapbox-gl/dist/mapbox-gl.css"
-import "../styles/App.css"
+import React, { useEffect, useRef, useState } from "react";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "../styles/App.css";
 import { geoLayer, keywordLayer, overlayData } from "../utils/overlays";
 import SearchForm from "./SearchForm";
 
 export default function StyleGuideBox() {
-  const [mapOverlay, setMapOverlay] = useState<GeoJSON.FeatureCollection | undefined>(undefined);
+  const [mapOverlay, setMapOverlay] = useState<
+    GeoJSON.FeatureCollection | undefined
+  >(undefined);
 
   useEffect(() => {
     overlayData().then((r) => {
@@ -15,7 +17,7 @@ export default function StyleGuideBox() {
 
   return (
     <div className="StyleGuideBox" role="guide-container">
-      Empty Space...
+      This is where the generated style guide would be!
     </div>
   );
 }
