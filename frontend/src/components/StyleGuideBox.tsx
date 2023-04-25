@@ -16,8 +16,11 @@ export default function StyleGuideBox() {
   }, []);
 
   return (
-    <div className="StyleGuideBox" role="guide-container">
-      This is where the generated style guide would be!
+    <div className="style-guide-box" aria-live="assertive">
+      <div className="color-swatches">lightblue!</div>
+      <div className="color-swatches"></div>
+      <div className="color-swatches"></div>
+      <div className="color-swatches"></div>
     </div>
   );
 }

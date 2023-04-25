@@ -4,10 +4,11 @@ import StyleGuideBox from "./components/StyleGuideBox";
 import SearchForm from "./components/SearchForm";
 
 function App() {
+
   return (
     <div className="App">
       <SearchForm />
-      <StyleGuideBox/>
+      <StyleGuideBox />
     </div>
   );
 }
