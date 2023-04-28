@@ -50,7 +50,7 @@ export default function SearchForm() {
 
     let url = ``;
     let { color, font, theme } = { ...formState };
-    url = `http://localhost:3232/cosearch?minLat=${minLat}&maxLat=${maxLat}&minLon=${minLon}&maxLon=${maxLon}`;
+    //url = `http://localhost:3232/cosearch?minLat=${minLat}&maxLat=${maxLat}&minLon=${minLon}&maxLon=${maxLon}`;
     const responseJson = await callAPI(url);
     if (isFeatureCollection(responseJson)) {
       //setStyleGuide(responseJson);
