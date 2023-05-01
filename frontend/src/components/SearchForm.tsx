@@ -63,6 +63,23 @@ export default function SearchForm() {
     }
   };
 
+  let newColors: Array<string> = new Array();
+  const newColor1 = "#FF0000";
+  const newColor2 = "#AA4A44";
+  const newColor3 = "#EE4B2B";
+  const newColor4 = "#880808";
+
+  function setColor(newColor: string[]) {
+    newColors.push(newColor1, newColor2, newColor3, newColor4);
+    document.documentElement.style.setProperty(
+      "--color-swatch-1",
+      formState.color
+    );
+    document.documentElement.style.setProperty("--color-swatch-2", newColor[1]);
+    document.documentElement.style.setProperty("--color-swatch-3", newColor[2]);
+    document.documentElement.style.setProperty("--color-swatch-4", newColor[3]);
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit} role="form" className="form-container">
@@ -110,6 +127,9 @@ export default function SearchForm() {
           <option value="food">Food</option>
           <option value="personal">Personal</option>
         </select>
+
+        <button onClick={() => setColor(newColors)}>Change colors!</button>
+
         <button
           role="generate-button"
           aria-label="Generate Button"

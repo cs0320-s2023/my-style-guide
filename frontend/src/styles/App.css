@@ -3,6 +3,9 @@
   --color-swatch-2: rgb(36, 36, 186);
   --color-swatch-3: rgb(76, 76, 210);
   --color-swatch-4: rgb(98, 92, 211);
+  --header-1: Tahoma, sans-serif;
+  --header-2: Tahoma, sans-serif;
+  --body: Tahoma, sans-serif;
 }
 
 .App {
@@ -88,6 +91,7 @@ h3 {
 }
 
 .typography-1 {
+  font-family: var(--header-1);
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-size: 5rem;
@@ -95,12 +99,14 @@ h3 {
 }
 
 .typography-2 {
+  font-family: var(--header-2);
   margin-bottom: 2rem;
   font-size: 3rem;
   text-align: start;
 }
 
 .typography-3 {
+  font-family: var(--body);
   margin-bottom: 2rem;
   font-size: 1rem;
   text-align: start;

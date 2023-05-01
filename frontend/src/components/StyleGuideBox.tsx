@@ -3,24 +3,25 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "../styles/App.css";
 import { geoLayer, keywordLayer, overlayData } from "../utils/overlays";
 import SearchForm from "./SearchForm";
-interface styleProps{
+
+interface styleProps {
   layout: string;
 }
 
-
-export default function StyleGuideBox(props : styleProps) {
+export default function StyleGuideBox(props: styleProps) {
   const layout = props.layout;
 
-  function renderBox(layout : string){
-      switch(layout){
+  function renderBox(layout: string) {
+    switch (layout) {
       case "a":
-      return(0);
+        return 0;
       case "b":
-        return(0);
+        return 0;
       case "c":
-        return(0);
+        return 0;
     }
   }
+
   const [mapOverlay, setMapOverlay] = useState<
     GeoJSON.FeatureCollection | undefined
   >(undefined);
