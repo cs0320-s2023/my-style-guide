@@ -9,17 +9,9 @@ export default function SearchForm() {
     "Select preferences to create a personalized style guide!"
   );
   const [dataText, setDataText] = useState("none");
-  const coordInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const focusCoord = (event: KeyboardEvent) => {
-      if (event.key === "PageUp") {
-        if (coordInputRef.current !== null) {
-          coordInputRef.current.focus();
-        }
-      }
-    };
     const focusKeyword = (event: KeyboardEvent) => {
       if (event.key === "PageDown") {
         if (keywordInputRef.current !== null) {
@@ -27,7 +19,6 @@ export default function SearchForm() {
         }
       }
     };
-    window.addEventListener("keydown", focusCoord);
     window.addEventListener("keydown", focusKeyword);
   });
 
@@ -45,15 +36,33 @@ export default function SearchForm() {
     });
   };
 
+  // credit to https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
+  var stringToColour = function (color: string) {
+    var hash = 0;
+    for (var i = 0; i < color.length; i++) {
+      hash = color.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    var colour = "#";
+    for (var i = 0; i < 3; i++) {
+      var value = (hash >> (i * 8)) & 0xff;
+      colour += ("00" + value.toString(16)).substr(-2);
+    }
+    return colour;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let url = ``;
+    var hexColor = stringToColour(formState.color);
+    let url =
+      `https://www.thecolorapi.com/scheme?` +
+      hexColor +
+      `B1E0&mode=triad&count=3`;
     let { color, font, theme } = { ...formState };
-    //url = `http://localhost:3232/cosearch?minLat=${minLat}&maxLat=${maxLat}&minLon=${minLon}&maxLon=${maxLon}`;
+    //let url = `http://localhost:3232/cosearch?minLat=${minLat}&maxLat=${maxLat}&minLon=${minLon}&maxLon=${maxLon}`;
     const responseJson = await callAPI(url);
-    if (isFeatureCollection(responseJson)) {
-      //setStyleGuide(responseJson);
+    if (responseJson != null) {
+      //setFormState(responseJson);
       setOutputText("Displaying guide...");
       // setDataText(
       //   `Latitude range: [${minLat}, ${maxLat}] . . . Longitude range: [${minLon}, ${maxLon}]`
@@ -64,20 +73,19 @@ export default function SearchForm() {
   };
 
   let newColors: Array<string> = new Array();
-  const newColor1 = "#FF0000";
   const newColor2 = "#AA4A44";
   const newColor3 = "#EE4B2B";
   const newColor4 = "#880808";
 
   function setColor(newColor: string[]) {
-    newColors.push(newColor1, newColor2, newColor3, newColor4);
+    newColors.push(newColor2, newColor3, newColor4);
     document.documentElement.style.setProperty(
       "--color-swatch-1",
       formState.color
     );
-    document.documentElement.style.setProperty("--color-swatch-2", newColor[1]);
-    document.documentElement.style.setProperty("--color-swatch-3", newColor[2]);
-    document.documentElement.style.setProperty("--color-swatch-4", newColor[3]);
+    document.documentElement.style.setProperty("--color-swatch-2", newColor[0]);
+    document.documentElement.style.setProperty("--color-swatch-3", newColor[1]);
+    document.documentElement.style.setProperty("--color-swatch-4", newColor[2]);
   }
 
   return (

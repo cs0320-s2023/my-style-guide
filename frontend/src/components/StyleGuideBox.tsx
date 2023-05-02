@@ -4,6 +4,7 @@ import "../styles/App.css";
 import { geoLayer, keywordLayer, overlayData } from "../utils/overlays";
 import SearchForm from "./SearchForm";
 
+
 interface styleProps {
   layout: string;
 }
