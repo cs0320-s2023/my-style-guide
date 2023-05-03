@@ -2,12 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import { callAPI, isFeatureCollection } from "../utils/overlays";
 import "../styles/App.css";
 import StyleGuideBox from "./StyleGuideBox";
+import { searchColor } from "../utils/color";
+import SearchBox from "./SearchBox";
 
 // Function to render a form that contains an input box and a submit button
 export default function SearchForm() {
   const [outputText, setOutputText] = useState(
     "Select preferences to create a personalized style guide!"
   );
+
   const [dataText, setDataText] = useState("none");
   const keywordInputRef = useRef<HTMLInputElement>(null);
 
@@ -23,9 +26,7 @@ export default function SearchForm() {
   });
 
   const [formState, setFormState] = useState({
-    color: "Red",
-    font: "Comfortable",
-    theme: "Education",
+    color: "Aliceblue",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -36,61 +37,70 @@ export default function SearchForm() {
     });
   };
 
-  // credit to https://stackoverflow.com/questions/3426404/create-a-hexadecimal-colour-based-on-a-string-with-javascript
-  var stringToColour = function (color: string) {
-    var hash = 0;
-    for (var i = 0; i < color.length; i++) {
-      hash = color.charCodeAt(i) + ((hash << 5) - hash);
+  // credit to https://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes/47355187#47355187
+
+  function stringToHex(color: string) {
+    var ctx = document.createElement("canvas").getContext("2d");
+    if (ctx != null) {
+      ctx.fillStyle = color;
+      return ctx.fillStyle;
     }
-    var colour = "#";
-    for (var i = 0; i < 3; i++) {
-      var value = (hash >> (i * 8)) & 0xff;
-      colour += ("00" + value.toString(16)).substr(-2);
-    }
-    return colour;
-  };
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    var hexColor = stringToColour(formState.color);
-    let url =
-      `https://www.thecolorapi.com/scheme?` +
-      hexColor +
-      `B1E0&mode=triad&count=3`;
-    let { color, font, theme } = { ...formState };
-    //let url = `http://localhost:3232/cosearch?minLat=${minLat}&maxLat=${maxLat}&minLon=${minLon}&maxLon=${maxLon}`;
-    const responseJson = await callAPI(url);
+    var hexColor = stringToHex(formState.color);
+    if (hexColor != null) {
+      hexColor = hexColor.substring(1);
+    }
+
+    let { color } = { ...formState };
+    let url = `http://localhost:3232/color?` + hexColor;
+    const responseJson = await searchColor(url);
     if (responseJson != null) {
       //setFormState(responseJson);
       setOutputText("Displaying guide...");
+      console.log(hexColor);
       // setDataText(
       //   `Latitude range: [${minLat}, ${maxLat}] . . . Longitude range: [${minLon}, ${maxLon}]`
       // );
+      document.documentElement.style.setProperty("--color-swatch-1", color);
     } else {
-      setOutputText(responseJson);
+      setOutputText("responseJson");
     }
   };
 
-  let newColors: Array<string> = new Array();
-  const newColor2 = "#AA4A44";
-  const newColor3 = "#EE4B2B";
-  const newColor4 = "#880808";
+  /**
+   * Sets the overlay data based on the search data using the keyword
+   */
+  const handleSearch = (keyword: string) => {
+    console.log(keyword);
 
-  function setColor(newColor: string[]) {
-    newColors.push(newColor2, newColor3, newColor4);
+    var hexColor: string = stringToHex(keyword)!;
+    if (hexColor != undefined) {
+      hexColor = hexColor.substring(1);
+    }
+
+    searchColor(hexColor).then((data) => {
+      console.log(data);
+      console.log(hexColor);
+      setFormState({ color: "#" + hexColor }); // we need to use data here somehow?
+      setDataText(keyword);
+    });
     document.documentElement.style.setProperty(
       "--color-swatch-1",
       formState.color
     );
-    document.documentElement.style.setProperty("--color-swatch-2", newColor[0]);
-    document.documentElement.style.setProperty("--color-swatch-3", newColor[1]);
-    document.documentElement.style.setProperty("--color-swatch-4", newColor[2]);
-  }
+  };
 
   return (
     <div>
-      <form onSubmit={handleSubmit} role="form" className="form-container">
+      <form
+        onSubmit={handleSubmit}
+        role="search-form"
+        className="form-container"
+      >
         <h3>My Style Guide</h3>
         <div>
           <b>Categories</b>
@@ -136,8 +146,6 @@ export default function SearchForm() {
           <option value="personal">Personal</option>
         </select>
 
-        <button onClick={() => setColor(newColors)}>Change colors!</button>
-
         <button
           role="generate-button"
           aria-label="Generate Button"
@@ -162,6 +170,7 @@ export default function SearchForm() {
         </div>
         <div>{dataText}</div>
       </form>
+      <SearchBox onSearch={handleSearch} />
     </div>
   );
 }

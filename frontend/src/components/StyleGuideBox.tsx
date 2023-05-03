@@ -1,40 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "../styles/App.css";
-import { geoLayer, keywordLayer, overlayData } from "../utils/overlays";
 import SearchForm from "./SearchForm";
 
-
-interface styleProps {
-  layout: string;
-}
-
-export default function StyleGuideBox(props: styleProps) {
-  const layout = props.layout;
-
-  function renderBox(layout: string) {
-    switch (layout) {
-      case "a":
-        return 0;
-      case "b":
-        return 0;
-      case "c":
-        return 0;
-    }
-  }
-
-  const [mapOverlay, setMapOverlay] = useState<
-    GeoJSON.FeatureCollection | undefined
-  >(undefined);
-
-  useEffect(() => {
-    overlayData().then((r) => {
-      setMapOverlay(r);
-    });
-  }, []);
-
+export default function StyleGuideBox() {
   return (
-    <div className="style-guide-box-wrapper" aria-live="assertive">
+    <div
+      className="style-guide-box-wrapper"
+      aria-live="assertive"
+      role="style-guide-box"
+    >
       <div className="style-guide-box-colors" aria-live="assertive">
         <div className="card">
           <div className="color-swatch-1"></div>

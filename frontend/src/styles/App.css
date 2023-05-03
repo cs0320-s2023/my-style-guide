@@ -17,6 +17,14 @@ h3 {
   margin-top: 0;
 }
 
+.search-box {
+  font-family: Tahoma, sans-serif;
+  display: flex;
+  flex-direction: column;
+  width: 16rem;
+  padding: 40px;
+}
+
 .form-container {
   font-family: Tahoma, sans-serif;
   display: flex;
