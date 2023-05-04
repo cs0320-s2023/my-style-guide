@@ -70,7 +70,7 @@ public class FontHandler implements Route {
     public Map<String, String> fontInfo(String gptFont) throws IOException {
         Map<String,String> fontInfo = new HashMap<>();
         String font = gptFont.replace(" ","+");
-        String url = "https://www.googleapis.com/webfonts/v1/webfonts?key="+  Constants.FONT_KEY +"&family="+font;
+        String url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCj_Mhke0zUczf0viyXaHvAgrwn_ww3288&family="+font;
 
 
         try{
