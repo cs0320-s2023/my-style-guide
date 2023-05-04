@@ -1,6 +1,7 @@
 package edu.brown.cs.student.main.handlers;
 import com.squareup.moshi.*;
 import edu.brown.cs.student.main.Constants;
+import edu.brown.cs.student.main.jsonUtils.GeoJSONResponse;
 import edu.brown.cs.student.main.jsonUtils.Serializer;
 import spark.Request;
 import spark.Response;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ public class FontHandler implements Route {
     @Override
     public Object handle(Request request, Response response) {
         try {
-            return this.fontInfo("Abel");
+            return this.fontInfo("Comic Sans");
         } catch (Exception e) {
             Map<String, Object> map = new HashMap<>();
             map.put("result", "error_bad_json");
@@ -67,12 +69,10 @@ public class FontHandler implements Route {
         return output;
     }
 
-    public Map<String, String> fontInfo(String gptFont) throws IOException {
+    public String fontInfo(String gptFont) throws IOException {
         Map<String,String> fontInfo = new HashMap<>();
         String font = gptFont.replace(" ","+");
         String url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCj_Mhke0zUczf0viyXaHvAgrwn_ww3288&family="+font;
-
-
         try{
             HttpURLConnection fontConnection = (HttpURLConnection) new URL(url).openConnection();
             fontConnection.setRequestMethod("GET");
@@ -86,23 +86,35 @@ public class FontHandler implements Route {
             while ((inputLine = bReader.readLine()) != null) {
                 response.append(inputLine);
             }
-
             bReader.close();
             fontConnection.disconnect();
-
-            System.out.println(response);
             FontResponse fontResponse = adapter.fromJson(response.toString());
-            System.out.println("b");
-
-
-            assert fontResponse != null;
-            fontInfo.put(font, fontResponse.items.get(0).category);
+            return new FontSuccessResponse(font,fontResponse.items.get(0).category).serialize();
 
         } catch (Exception e) {
-            fontInfo.put("Error", "No such font found");
+            return new FontFailureResponse("Error",e.getMessage()).serialize();
         }
+    }
 
-        return fontInfo;
+    public record FontFailureResponse(String result, String error_message) {
+        public String serialize() {
+            Map<String, Object> responseMap = new LinkedHashMap<>();
+            responseMap.put("result", this.result);
+            responseMap.put("error_message", this.error_message);
+            return Serializer.serializeFailure(responseMap);
+        }
+    }
+
+    public record FontSuccessResponse(String font, String style) {
+        public FontSuccessResponse(String font) {
+            this("success", font);
+        }
+        public String serialize() {
+            Map<String, Object> responseMap = new LinkedHashMap<>();
+            responseMap.put("font", this.font);
+            responseMap.put("style", this.style);
+            return Serializer.serializeSuccess(responseMap);
+        }
     }
 
     public static class FontResponse {
