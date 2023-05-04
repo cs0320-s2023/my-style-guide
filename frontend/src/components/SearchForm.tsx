@@ -109,12 +109,22 @@ export default function SearchForm() {
 
   return (
     <div>
+      <form className="left-container">
+        <h3>My Style Guide</h3>
+        <h4>
+          Create a unique UI style guide with My Style Guide! Just input a
+          desired color and theme to get a custom style guide with colors and
+          fonts.
+        </h4>
+      </form>
+
+      <SearchBox onSearch={handleSearch} />
+
       <form
         onSubmit={handleSubmit}
         role="search-form"
         className="form-container"
       >
-        <h3>My Style Guide</h3>
         <div>
           <b>Categories</b>
         </div>
@@ -183,7 +193,6 @@ export default function SearchForm() {
         </div>
         <div>{dataText}</div>
       </form>
-      <SearchBox onSearch={handleSearch} />
     </div>
   );
 }

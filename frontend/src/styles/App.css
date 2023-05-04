@@ -1,11 +1,13 @@
+@import url("https://fonts.googleapis.com/css?family=Inter:300,400,500,700,900");
+
 :root {
   --color-swatch-1: rgb(33, 33, 220);
   --color-swatch-2: rgb(36, 36, 186);
   --color-swatch-3: rgb(76, 76, 210);
   --color-swatch-4: rgb(98, 92, 211);
-  --header-1: Tahoma, sans-serif;
-  --header-2: Tahoma, sans-serif;
-  --body: Tahoma, sans-serif;
+  --header-1: "Inter", sans-serif;
+  --header-2: "Inter", sans-serif;
+  --body: "Inter", sans-serif;
 }
 
 .App {
@@ -13,12 +15,61 @@
 }
 
 h3 {
+  font-family: "Inter", sans-serif;
+  letter-spacing: 0.5px;
+  color: rgb(38, 38, 38);
+  font-weight: 700;
   font-size: 30px;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+h4 {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  color: rgb(82, 82, 82);
+  font-size: 15px;
   margin-top: 0;
 }
 
+input {
+  display: block;
+  width: 90%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgb(222, 222, 222);
+  transition: 0.3s border-color;
+}
+
+input:hover {
+  border: 1px solid #aaa;
+}
+
+button {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: rgb(66, 116, 243);
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+button:hover {
+  color: #fff;
+  background: rgb(40, 98, 247);
+}
+
 .search-box {
-  font-family: Tahoma, sans-serif;
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   width: 16rem;
@@ -26,11 +77,20 @@ h3 {
 }
 
 .form-container {
-  font-family: Tahoma, sans-serif;
+  font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   width: 16rem;
   padding: 40px;
+}
+
+.left-container {
+  font-family: Tahoma, sans-serif;
+  display: flex;
+  flex-direction: column;
+  width: 16rem;
+  padding-top: 40px;
+  padding-left: 40px;
 }
 
 .style-guide-box-wrapper {
@@ -43,6 +103,7 @@ h3 {
 }
 
 .style-guide-box-colors {
+  height: 5rem;
   width: 55rem;
   display: grid;
   grid-template-columns: auto auto auto auto;
@@ -50,6 +111,7 @@ h3 {
 }
 
 .style-guide-box-type {
+  height: 15rem;
   width: 60rem;
   display: grid;
   grid-template-rows: auto auto auto;
@@ -101,21 +163,20 @@ h3 {
 .typography-1 {
   font-family: var(--header-1);
   margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-size: 5rem;
+  margin-bottom: 0.5rem;
+  font-size: 4rem;
   text-align: start;
 }
 
 .typography-2 {
   font-family: var(--header-2);
-  margin-bottom: 2rem;
-  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
   text-align: start;
 }
 
 .typography-3 {
   font-family: var(--body);
-  margin-bottom: 2rem;
   font-size: 1rem;
   text-align: start;
 }
