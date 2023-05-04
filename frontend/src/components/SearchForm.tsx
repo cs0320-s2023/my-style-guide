@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { callAPI, isFeatureCollection } from "../utils/overlays";
 import "../styles/App.css";
 import StyleGuideBox from "./StyleGuideBox";
-import { searchColor } from "../utils/color";
+import { searchColor, searchFont } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
 // Function to render a form that contains an input box and a submit button
@@ -27,6 +27,7 @@ export default function SearchForm() {
 
   const [formState, setFormState] = useState({
     color: "Aliceblue",
+    font: "Times New Roman",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -47,6 +48,7 @@ export default function SearchForm() {
     }
   }
 
+  // old method from ezra's stencil
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -74,24 +76,35 @@ export default function SearchForm() {
   /**
    * Sets the overlay data based on the search data using the keyword
    */
-  const handleSearch = (keyword: string) => {
-    console.log(keyword);
+  const handleSearch = (content: string) => {
+    var tokens = content.split(" ");
+    var colorKeyword = tokens[0];
+    var fontKeyword = tokens[1];
 
-    var hexColor: string = stringToHex(keyword)!;
+    var hexColor: string = stringToHex(colorKeyword)!;
     if (hexColor != undefined) {
       hexColor = hexColor.substring(1);
     }
 
     searchColor(hexColor).then((data) => {
       console.log(data);
+      console.log(colorKeyword);
       console.log(hexColor);
-      setFormState({ color: "#" + hexColor }); // we need to use data here somehow?
-      setDataText(keyword);
+      setFormState({ color: "#" + hexColor, font: "Times New Roman" }); // we need to use data here somehow?
     });
+
+    searchFont(fontKeyword).then((data) => {
+      console.log(data);
+      console.log(fontKeyword);
+      //setFormState({ color: "#" + hexColor, font: }); // we need to use data here somehow?
+      setDataText(colorKeyword + " " + fontKeyword);
+    });
+
     document.documentElement.style.setProperty(
       "--color-swatch-1",
       formState.color
     );
+    document.documentElement.style.setProperty("--header-1", formState.font);
   };
 
   return (
@@ -123,7 +136,7 @@ export default function SearchForm() {
         <select
           name="fonts"
           id="fonts"
-          value={formState.font}
+          //value={formState.font}
           onChange={handleInputChange}
         >
           <option value="comfortable">Comfortable</option>
@@ -136,7 +149,7 @@ export default function SearchForm() {
         <select
           name="themes"
           id="themes"
-          value={formState.theme}
+          //value={formState.theme}
           onChange={handleInputChange}
         >
           <option value="education">Education</option>

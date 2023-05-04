@@ -17,6 +17,20 @@ export async function searchColor(
 }
 
 /**
+ * For making the API call to gather the overlay data upon a search
+ * @param keyword
+ * @returns
+ */
+export async function searchFont(keyword: string): Promise<string | undefined> {
+  return new Promise((resolve, reject) => {
+    fontAPICall(keyword).then((rl_data) => {
+      //const rl_json = JSON.parse(rl_data);
+      resolve("success");
+    });
+  });
+}
+
+/**
  * Makes API call to the backend in order to gather the data relevant to the user's
  * search which will be overlayed on the orginal data
  * @param keyword - String, the term the user is searching for
@@ -25,6 +39,26 @@ export async function searchColor(
 function colorSearchAPICall(keyword: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fetch("https://www.thecolorapi.com/scheme?hex=" + keyword)
+      .then((response) => response.json())
+      .then((json) => {
+        console.log(json);
+        if (isLoadSuccessRes(json)) {
+          resolve(json.filepath);
+        } else if (isLoadFailRes(json)) {
+          resolve(json.error_message);
+        } else {
+          resolve("Return type was not a valid response type.");
+        }
+      })
+      .catch((e) => {
+        resolve(e.message);
+      });
+  });
+}
+
+function fontAPICall(keyword: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:3232/font?adj=" + keyword)
       .then((response) => response.json())
       .then((json) => {
         console.log(json);
