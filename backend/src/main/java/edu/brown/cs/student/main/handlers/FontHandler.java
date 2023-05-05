@@ -1,7 +1,6 @@
 package edu.brown.cs.student.main.handlers;
 import com.squareup.moshi.*;
 import edu.brown.cs.student.main.Constants;
-import edu.brown.cs.student.main.jsonUtils.GeoJSONResponse;
 import edu.brown.cs.student.main.jsonUtils.Serializer;
 import spark.Request;
 import spark.Response;

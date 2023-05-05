@@ -14,15 +14,19 @@ public class JSONReader<T> {
     }
 
     public String readFromFile(String path) throws IOException {
-        String data = "";
+        StringBuilder builder = new StringBuilder();
         try {
             Reader reader = new FileReader(path, StandardCharsets.UTF_8);
-            BufferedReader bf = new BufferedReader(reader);
-            data = bf.readLine();
+            BufferedReader br = new BufferedReader(reader);
+            String line;
+            while ((line = br.readLine()) != null) {
+                builder.append(line);
+            }
+            br.close();
         } catch (IOException e) {
             throw new IOException("Could not open file at '" + path + "'.");
         }
-        return data;
+        return builder.toString();
     }
 
     public T fromJson(String jsonString) throws IOException, JsonDataException {

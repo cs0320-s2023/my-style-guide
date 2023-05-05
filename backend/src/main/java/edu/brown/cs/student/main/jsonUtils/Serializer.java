@@ -3,7 +3,7 @@ package edu.brown.cs.student.main.jsonUtils;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import edu.brown.cs.student.main.jsonUtils.GeoJSONResponse.GeoJSON;
+
 import java.util.Map;
 
 /**
@@ -19,8 +19,8 @@ public class Serializer {
     try {
       Moshi moshi = new Moshi.Builder().build();
       JsonAdapter<Map<String, Object>> jsonAdapter = moshi.adapter(
-            Types.newParameterizedType(Map.class, String.class, Object.class, GeoJSON.class));
-      return jsonAdapter.indent(" ").toJson(responses);
+            Types.newParameterizedType(Map.class, String.class, Object.class));
+      return jsonAdapter.toJson(responses);
     } catch (Exception e) {
       e.printStackTrace();
       throw e;
