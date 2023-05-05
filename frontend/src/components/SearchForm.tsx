@@ -99,13 +99,15 @@ export default function SearchForm() {
       //setFormState({ color: "#" + hexColor, font: }); // we need to use data here somehow?
       setDataText(colorKeyword + " " + fontKeyword);
     });
+  };
 
+  useEffect(() => {
     document.documentElement.style.setProperty(
       "--color-swatch-1",
       formState.color
     );
     document.documentElement.style.setProperty("--header-1", formState.font);
-  };
+  });
 
   return (
     <div>
@@ -113,8 +115,8 @@ export default function SearchForm() {
         <h3>My Style Guide</h3>
         <h4>
           Create a unique UI style guide with My Style Guide! Just input a
-          desired color and theme to get a custom style guide with colors and
-          fonts.
+          desired <b>color</b> and <b>theme</b> to get a custom style guide with
+          colors and fonts.
         </h4>
       </form>
 

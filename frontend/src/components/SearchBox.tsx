@@ -28,7 +28,7 @@ function SearchBox(props: SearchBoxProps) {
         aria-label="Search box"
         aria-description="Input your search keyword here, followed by clicking the search button or pressing enter"
         type="text"
-        placeholder="Enter search keyword here."
+        placeholder="Enter search keywords here."
         value={query}
         onChange={handleInput}
       />
