@@ -5,6 +5,10 @@ import StyleGuideBox from "./StyleGuideBox";
 import { searchColor, searchFont } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
+interface SearchFormProps {
+  hex: string;
+}
+
 // Function to render a form that contains an input box and a submit button
 export default function SearchForm() {
   const [outputText, setOutputText] = useState(
@@ -26,8 +30,8 @@ export default function SearchForm() {
   });
 
   const [formState, setFormState] = useState({
-    color: "Aliceblue",
-    font: "Times New Roman",
+    color: "Black",
+    font: "Inter",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -48,7 +52,7 @@ export default function SearchForm() {
     }
   }
 
-  // old method from ezra's stencil
+  // old method from ezra's stencil--not currently using
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -74,7 +78,7 @@ export default function SearchForm() {
   };
 
   /**
-   * Sets the overlay data based on the search data using the keyword
+   * Sets the style guide based on the search data using the keyword
    */
   const handleSearch = (content: string) => {
     var tokens = content.split(" ");
@@ -90,13 +94,14 @@ export default function SearchForm() {
       console.log(data);
       console.log(colorKeyword);
       console.log(hexColor);
-      setFormState({ color: "#" + hexColor, font: "Times New Roman" }); // we need to use data here somehow?
+      setOutputText("Success!");
+      setFormState({ color: "#" + hexColor, font: "Times New Roman" });
     });
 
     searchFont(fontKeyword).then((data) => {
       console.log(data);
       console.log(fontKeyword);
-      //setFormState({ color: "#" + hexColor, font: }); // we need to use data here somehow?
+      //setFormState({ color: "#" + hexColor, font: });
       setDataText(colorKeyword + " " + fontKeyword);
     });
   };
@@ -106,21 +111,50 @@ export default function SearchForm() {
       "--color-swatch-1",
       formState.color
     );
+    document.documentElement.style.setProperty(
+      "--color-swatch-2",
+      formState.color
+    );
+    document.documentElement.style.setProperty(
+      "--color-swatch-3",
+      formState.color
+    );
+    document.documentElement.style.setProperty(
+      "--color-swatch-4",
+      formState.color
+    );
     document.documentElement.style.setProperty("--header-1", formState.font);
+    document.documentElement.style.setProperty("--header-2", formState.font);
+    document.documentElement.style.setProperty("--body", formState.font);
   });
 
   return (
     <div>
-      <form className="left-container">
+      <div className="left-container">
         <h3>My Style Guide</h3>
         <h4>
           Create a unique UI style guide with My Style Guide! Just input a
           desired <b>color</b> and <b>theme</b> to get a custom style guide with
           colors and fonts.
         </h4>
-      </form>
+        <h4>
+          For example: <b>crimson professional</b>
+        </h4>
+      </div>
 
       <SearchBox onSearch={handleSearch} />
+
+      <div className="left-container">
+        <div>
+          <h4>Result: {outputText}</h4>
+        </div>
+
+        <div>
+          <h4>
+            Currently generating a style guide for: <b>{dataText}</b>
+          </h4>
+        </div>
+      </div>
 
       <form
         onSubmit={handleSubmit}
@@ -181,19 +215,6 @@ export default function SearchForm() {
         >
           Generate Style Guide!
         </button>
-
-        <br />
-
-        <div>
-          <b>Output Message:</b>
-        </div>
-        <div>{outputText}</div>
-
-        <br />
-        <div>
-          <b>Current Input:</b>
-        </div>
-        <div>{dataText}</div>
       </form>
     </div>
   );

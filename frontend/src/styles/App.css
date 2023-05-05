@@ -32,6 +32,16 @@ h4 {
   margin-top: 0;
 }
 
+h5 {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: rgb(114, 114, 114);
+  font-size: 13px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
 input {
   display: block;
   width: 90%;
@@ -94,16 +104,25 @@ button:hover {
 }
 
 .style-guide-box-wrapper {
+  background-color: rgb(253, 253, 253);
+  max-height: 38rem;
   padding: 40px;
   margin-top: 3rem;
   width: 55rem;
   border: 1px solid rgb(228, 228, 228);
   display: grid;
-  grid-template-rows: auto;
+  grid-template-rows: 0.1fr auto auto;
+}
+
+.style-guide-box-wrapper-bottom {
+  width: 60rem;
+  display: grid;
+  grid-template-rows: 0.1fr auto;
+  grid-template-columns: 0.3fr 0.3fr;
 }
 
 .style-guide-box-colors {
-  height: 5rem;
+  height: 7rem;
   width: 55rem;
   display: grid;
   grid-template-columns: auto auto auto auto;
@@ -111,13 +130,18 @@ button:hover {
 }
 
 .style-guide-box-type {
-  height: 15rem;
-  width: 60rem;
+  width: 30rem;
   display: grid;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: 0.2fr 0.3fr 0.3fr;
+}
+
+.style-guide-box-button {
+  display: grid;
+  grid-template-rows: 0.2fr 0.2fr 0.2fr;
 }
 
 .card {
+  background-color: white;
   box-shadow: inset 0px 0px 0px 1px rgb(228, 228, 228);
 }
 
@@ -154,6 +178,8 @@ button:hover {
 }
 
 .hex-1 {
+  font-family: "Inter", sans-serif;
+  color: rgb(82, 82, 82);
   margin: 10px;
   display: flex;
   align-items: center;
@@ -162,7 +188,6 @@ button:hover {
 
 .typography-1 {
   font-family: var(--header-1);
-  margin-top: 1rem;
   margin-bottom: 0.5rem;
   font-size: 4rem;
   text-align: start;
@@ -170,7 +195,6 @@ button:hover {
 
 .typography-2 {
   font-family: var(--header-2);
-  margin-bottom: 1rem;
   font-size: 2.5rem;
   text-align: start;
 }
