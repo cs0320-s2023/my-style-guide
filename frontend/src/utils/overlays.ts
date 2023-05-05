@@ -1,6 +1,6 @@
 import { FeatureCollection } from "geojson";
 import { FillLayer } from "react-map-gl";
-import { NoFoundFeats, ProvidenceMockFeats } from "../../tests/mockData"
+import { NoFoundFeats, ProvidenceMockFeats } from "../../tests/mockData";
 
 const propertyName = "holc_grade";
 export const geoLayer: FillLayer = {
@@ -27,9 +27,9 @@ export const geoLayer: FillLayer = {
 export const keywordLayer: FillLayer = {
   id: "keyword_data",
   type: "fill",
-  paint: { 
+  paint: {
     "fill-color": "#ffff00",
-    "fill-opacity": 0.5 
+    "fill-opacity": 0.5,
   },
 };
 
@@ -41,13 +41,14 @@ export function isFeatureCollection(json: any): json is FeatureCollection {
  * Makes the initial call to overlay the entire redlining data map
  * @returns Promise<GeoJSON.FeatureCollection | undefined>
  */
-export async function overlayData(): Promise<GeoJSON.FeatureCollection | undefined> {
+export async function overlayData(): Promise<
+  GeoJSON.FeatureCollection | undefined
+> {
   const url =
-      "http://localhost:3232/cosearch?minLat=-90&maxLat=90&minLon=-180&maxLon=180";
+    "http://localhost:3232/cosearch?minLat=-90&maxLat=90&minLon=-180&maxLon=180";
   return new Promise((resolve, reject) => {
-    callAPI(url)
-      .then((rl_data) => {
-        console.log(isFeatureCollection(rl_data))
+    callAPI(url).then((rl_data) => {
+      console.log(isFeatureCollection(rl_data));
       resolve(isFeatureCollection(rl_data) ? rl_data : undefined);
     });
   });
@@ -55,7 +56,7 @@ export async function overlayData(): Promise<GeoJSON.FeatureCollection | undefin
 
 /**
  * Makes call to back-end server based on user input (coordinates or keyword)
- * @param url 
+ * @param url
  * @returns Promise<string> containing either a GeoJSON or error message
  */
 export function callAPI(url: string): Promise<string> {
@@ -65,13 +66,12 @@ export function callAPI(url: string): Promise<string> {
       .then((json) => {
         console.log(json);
         if (isMapSuccessResponse(json)) {
-          console.log("success response")
+          console.log("success response");
           resolve(json.data);
         } else if (isMapFailureResponse(json)) {
-          console.log("failure response")
+          console.log("failure response");
           resolve(json.error_message);
-        } 
-        else {
+        } else {
           resolve("Return type was not a valid response type.");
         }
       })
@@ -85,8 +85,8 @@ export function callAPI(url: string): Promise<string> {
  * Interface for a successful map response
  */
 export interface MapSuccessResponse {
-  result: string,
-  data: string
+  result: string;
+  data: string;
 }
 
 /**
@@ -122,10 +122,12 @@ function isMapFailureResponse(rjson: any): rjson is MapFailureResponse {
 /**
  * This is a map to store mock data for testing purposes.
  */
-export const MockData = new Map<string, FeatureCollection | MapFailureResponse>([
-  ["Providence", ProvidenceMockFeats],
-  ["undefinedKey", NoFoundFeats]
-]);
+export const MockData = new Map<string, FeatureCollection | MapFailureResponse>(
+  [
+    ["Providence", ProvidenceMockFeats],
+    ["undefinedKey", NoFoundFeats],
+  ]
+);
 
 /**
  * Adds a mock response to the map of mock data.
@@ -133,7 +135,10 @@ export const MockData = new Map<string, FeatureCollection | MapFailureResponse>(
  * @param key - the key to associate with the mock response
  * @param response - the mock response to add to the map
  */
-export function addMock(key: string, response: FeatureCollection | MapFailureResponse) {
+export function addMock(
+  key: string,
+  response: FeatureCollection | MapFailureResponse
+) {
   MockData.set(key, response);
 }
 

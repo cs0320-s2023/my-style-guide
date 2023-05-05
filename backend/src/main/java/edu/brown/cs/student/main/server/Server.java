@@ -2,6 +2,7 @@ package edu.brown.cs.student.main.server;
 
 import static spark.Spark.after;
 
+import edu.brown.cs.student.main.handlers.FontHandler;
 import edu.brown.cs.student.main.handlers.KeywordSearchHandler;
 import spark.Spark;
 
@@ -31,6 +32,7 @@ public class Server {
         // Initializing the state of the server
         Spark.get("cosearch", new CoordSearchHandler());
         Spark.get("kwsearch", new KeywordSearchHandler());
+        Spark.get("font", new FontHandler());
         Spark.init();
         Spark.awaitInitialization();
         System.out.println("Server started at http://localhost:3232.");

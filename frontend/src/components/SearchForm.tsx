@@ -2,24 +2,23 @@ import { useState, useRef, useEffect } from "react";
 import { callAPI, isFeatureCollection } from "../utils/overlays";
 import "../styles/App.css";
 import StyleGuideBox from "./StyleGuideBox";
+import { searchColor, searchFont } from "../utils/elements";
+import SearchBox from "./SearchBox";
+
+interface SearchFormProps {
+  hex: string;
+}
 
 // Function to render a form that contains an input box and a submit button
 export default function SearchForm() {
   const [outputText, setOutputText] = useState(
     "Select preferences to create a personalized style guide!"
   );
+
   const [dataText, setDataText] = useState("none");
-  const coordInputRef = useRef<HTMLInputElement>(null);
   const keywordInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const focusCoord = (event: KeyboardEvent) => {
-      if (event.key === "PageUp") {
-        if (coordInputRef.current !== null) {
-          coordInputRef.current.focus();
-        }
-      }
-    };
     const focusKeyword = (event: KeyboardEvent) => {
       if (event.key === "PageDown") {
         if (keywordInputRef.current !== null) {
@@ -27,14 +26,12 @@ export default function SearchForm() {
         }
       }
     };
-    window.addEventListener("keydown", focusCoord);
     window.addEventListener("keydown", focusKeyword);
   });
 
   const [formState, setFormState] = useState({
-    color: "Red",
-    font: "Comfortable",
-    theme: "Education",
+    color: "Black",
+    font: "Inter",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -45,28 +42,125 @@ export default function SearchForm() {
     });
   };
 
+  // credit to https://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes/47355187#47355187
+
+  function stringToHex(color: string) {
+    var ctx = document.createElement("canvas").getContext("2d");
+    if (ctx != null) {
+      ctx.fillStyle = color;
+      return ctx.fillStyle;
+    }
+  }
+
+  // old method from ezra's stencil--not currently using
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let url = ``;
-    let { color, font, theme } = { ...formState };
-    //url = `http://localhost:3232/cosearch?minLat=${minLat}&maxLat=${maxLat}&minLon=${minLon}&maxLon=${maxLon}`;
-    const responseJson = await callAPI(url);
-    if (isFeatureCollection(responseJson)) {
-      //setStyleGuide(responseJson);
+    var hexColor = stringToHex(formState.color);
+    if (hexColor != null) {
+      hexColor = hexColor.substring(1);
+    }
+
+    let { color } = { ...formState };
+    let url = `http://localhost:3232/color?` + hexColor;
+    const responseJson = await searchColor(url);
+    if (responseJson != null) {
+      //setFormState(responseJson);
       setOutputText("Displaying guide...");
+      console.log(hexColor);
       // setDataText(
       //   `Latitude range: [${minLat}, ${maxLat}] . . . Longitude range: [${minLon}, ${maxLon}]`
       // );
+      document.documentElement.style.setProperty("--color-swatch-1", color);
     } else {
-      setOutputText(responseJson);
+      setOutputText("responseJson");
     }
   };
 
+  /**
+   * Sets the style guide based on the search data using the keyword
+   */
+  const handleSearch = (content: string) => {
+    var tokens = content.split(" ");
+    var colorKeyword = tokens[0];
+    var fontKeyword = tokens[1];
+
+    var hexColor: string = stringToHex(colorKeyword)!;
+    if (hexColor != undefined) {
+      hexColor = hexColor.substring(1);
+    }
+
+    searchColor(hexColor).then((data) => {
+      console.log(data);
+      console.log(colorKeyword);
+      console.log(hexColor);
+      setOutputText("Success!");
+      setFormState({ color: "#" + hexColor, font: "Times New Roman" });
+    });
+
+    searchFont(fontKeyword).then((data) => {
+      console.log(data);
+      console.log(fontKeyword);
+      //setFormState({ color: "#" + hexColor, font: });
+      setDataText(colorKeyword + " " + fontKeyword);
+    });
+  };
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--color-swatch-1",
+      formState.color
+    );
+    document.documentElement.style.setProperty(
+      "--color-swatch-2",
+      formState.color
+    );
+    document.documentElement.style.setProperty(
+      "--color-swatch-3",
+      formState.color
+    );
+    document.documentElement.style.setProperty(
+      "--color-swatch-4",
+      formState.color
+    );
+    document.documentElement.style.setProperty("--header-1", formState.font);
+    document.documentElement.style.setProperty("--header-2", formState.font);
+    document.documentElement.style.setProperty("--body", formState.font);
+  });
+
   return (
     <div>
-      <form onSubmit={handleSubmit} role="form" className="form-container">
+      <div className="left-container">
         <h3>My Style Guide</h3>
+        <h4>
+          Create a unique UI style guide with My Style Guide! Just input a
+          desired <b>color</b> and <b>theme</b> to get a custom style guide with
+          colors and fonts.
+        </h4>
+        <h4>
+          For example: <b>crimson professional</b>
+        </h4>
+      </div>
+
+      <SearchBox onSearch={handleSearch} />
+
+      <div className="left-container">
+        <div>
+          <h4>Result: {outputText}</h4>
+        </div>
+
+        <div>
+          <h4>
+            Currently generating a style guide for: <b>{dataText}</b>
+          </h4>
+        </div>
+      </div>
+
+      <form
+        onSubmit={handleSubmit}
+        role="search-form"
+        className="form-container"
+      >
         <div>
           <b>Categories</b>
         </div>
@@ -88,7 +182,7 @@ export default function SearchForm() {
         <select
           name="fonts"
           id="fonts"
-          value={formState.font}
+          //value={formState.font}
           onChange={handleInputChange}
         >
           <option value="comfortable">Comfortable</option>
@@ -101,7 +195,7 @@ export default function SearchForm() {
         <select
           name="themes"
           id="themes"
-          value={formState.theme}
+          //value={formState.theme}
           onChange={handleInputChange}
         >
           <option value="education">Education</option>
@@ -110,6 +204,7 @@ export default function SearchForm() {
           <option value="food">Food</option>
           <option value="personal">Personal</option>
         </select>
+
         <button
           role="generate-button"
           aria-label="Generate Button"
@@ -120,19 +215,6 @@ export default function SearchForm() {
         >
           Generate Style Guide!
         </button>
-
-        <br />
-
-        <div>
-          <b>Output Message:</b>
-        </div>
-        <div>{outputText}</div>
-
-        <br />
-        <div>
-          <b>Current Input:</b>
-        </div>
-        <div>{dataText}</div>
       </form>
     </div>
   );

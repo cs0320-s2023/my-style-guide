@@ -10,6 +10,7 @@
     "vitest": "^0.29.8"
   },
   "dependencies": {
+    "openai": "^3.2.1",
     "react-map-gl": "^7.0.21"
   }
 }
