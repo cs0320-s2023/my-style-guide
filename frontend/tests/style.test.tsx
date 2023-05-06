@@ -7,8 +7,8 @@ import { getSearchOverlayMock } from "../src/utils/overlays";
 
 describe("Render SearchForm and StyleGuideBox", () => {
   test("MapBox and input component display without crashing", () => {
-    render(<SearchForm />);
-    render(<StyleGuideBox />);
+    //render(<SearchForm />);
+    //render(<StyleGuideBox />);
     const searchForm = screen.getByRole("search-form");
     const styleGuideBox = screen.getByRole("style-guide-box");
     expect(searchForm).toBeInTheDocument();
@@ -16,7 +16,7 @@ describe("Render SearchForm and StyleGuideBox", () => {
   });
 });
 
-describe("test mock for MapSuccessResponse", () => {
+describe("test mock for LoadSuccessResponse", () => {
   test("returns a valid OverlayResponse for a known location", async () => {
     const mockResponse = await getSearchOverlayMock("Providence");
     expect(mockResponse).toBeDefined();

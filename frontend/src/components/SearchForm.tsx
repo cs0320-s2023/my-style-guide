@@ -1,16 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import { callAPI, isFeatureCollection } from "../utils/overlays";
 import "../styles/App.css";
 import StyleGuideBox from "./StyleGuideBox";
 import { searchColor, searchFont } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
 interface SearchFormProps {
-  hex: string;
+  hex: string[];
+  setHex: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 // Function to render a form that contains an input box and a submit button
-export default function SearchForm() {
+export default function SearchForm(props: SearchFormProps) {
   const [outputText, setOutputText] = useState(
     "Select preferences to create a personalized style guide!"
   );
@@ -81,29 +81,31 @@ export default function SearchForm() {
    * Sets the style guide based on the search data using the keyword
    */
   const handleSearch = (content: string) => {
-    var tokens = content.split(" ");
-    var colorKeyword = tokens[0];
-    var fontKeyword = tokens[1];
+    props.setHex([]);
+    let tokens = content.split(" ");
+    let colorKeyword = tokens[0];
+    let fontKeyword = tokens[1];
 
-    var hexColor: string = stringToHex(colorKeyword)!;
+    let hexColor: string = stringToHex(colorKeyword)!;
     if (hexColor != undefined) {
       hexColor = hexColor.substring(1);
     }
 
     searchColor(hexColor).then((data) => {
-      console.log(data);
-      console.log(colorKeyword);
-      console.log(hexColor);
+      //console.log(data);
+      //console.log(colorKeyword);
       setOutputText("Success!");
-      setFormState({ color: "#" + hexColor, font: "Times New Roman" });
     });
 
     searchFont(fontKeyword).then((data) => {
-      console.log(data);
-      console.log(fontKeyword);
-      //setFormState({ color: "#" + hexColor, font: });
-      setDataText(colorKeyword + " " + fontKeyword);
+      //console.log(fontKeyword);
     });
+
+    const hexList = [hexColor, "hex2", "hex3", "hex4"];
+    props.setHex(hexList);
+
+    setFormState({ color: "#" + hexColor, font: "Times New Roman" });
+    setDataText(colorKeyword + " " + fontKeyword);
   };
 
   useEffect(() => {

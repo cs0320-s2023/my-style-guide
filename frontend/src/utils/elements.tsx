@@ -9,9 +9,9 @@ export async function searchColor(
   keyword: string
 ): Promise<string | undefined> {
   return new Promise((resolve, reject) => {
-    colorSearchAPICall(keyword).then((rl_data) => {
-      //const rl_json = JSON.parse(rl_data);
-      resolve("success");
+    colorSearchAPICall(keyword).then((data) => {
+      const json = JSON.parse(data);
+      resolve(json);
     });
   });
 }
@@ -36,7 +36,7 @@ export async function searchFont(keyword: string): Promise<string | undefined> {
  * @param keyword - String, the term the user is searching for
  * @returns
  */
-function colorSearchAPICall(keyword: string): Promise<string> {
+export function colorSearchAPICall(keyword: string): Promise<string> {
   return new Promise((resolve, reject) => {
     fetch("https://www.thecolorapi.com/scheme?hex=" + keyword)
       .then((response) => response.json())
