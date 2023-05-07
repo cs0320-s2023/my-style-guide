@@ -157,10 +157,10 @@ public class TestColor {
     String data = jsonReader.readFromFile("data/colorDescriptions.json");
     ColorDescJSON json = jsonReader.fromJson(data);
 
-    String[] hsl = val.split("=|,");
-    double h = Double.parseDouble(hsl[1]) * 360.; // accounting for decimal form (see getColorFromInput() in ColorHandler)
-    double s = Double.parseDouble(hsl[2]);
-    double l = Double.parseDouble(hsl[3]);
+    String[] hsl = val.split(",");
+    double h = Double.parseDouble(hsl[0]) * 360.; // accounting for decimal form (see getColorFromInput() in ColorHandler)
+    double s = Double.parseDouble(hsl[1]);
+    double l = Double.parseDouble(hsl[2]);
 
     List<Description> filteredColors = new ArrayList<>();
     for (Description desc : json.descriptions()) {

@@ -5,16 +5,16 @@
  * @param keyword
  * @returns
  */
-export async function searchColor(
-  keyword: string
-): Promise<string | undefined> {
-  return new Promise((resolve, reject) => {
-    colorSearchAPICall(keyword).then((data) => {
-      const json = JSON.parse(data);
-      resolve(json);
-    });
-  });
-}
+// export async function searchColor(
+//   keyword: string
+// ): Promise<string | undefined> {
+//   return new Promise((resolve, reject) => {
+//     colorSearchAPICall(keyword).then((data) => {
+//       const json = JSON.parse(data);
+//       resolve(json);
+//     });
+//   });
+// }
 
 /**
  * For making the API call to gather the overlay data upon a search
@@ -36,24 +36,39 @@ export async function searchFont(keyword: string): Promise<string | undefined> {
  * @param keyword - String, the term the user is searching for
  * @returns
  */
-export function colorSearchAPICall(keyword: string): Promise<string> {
+export async function colorSearchAPICall(hslVal: string): Promise<string[]> {
+  const colorApiCall = await fetch(
+    "https://www.thecolorapi.com/scheme?hsl=" + hslVal + "&count=4"
+  );
+  const colorApiJSON = await colorApiCall.json();
   return new Promise((resolve, reject) => {
-    fetch("https://www.thecolorapi.com/scheme?hex=" + keyword)
-      .then((response) => response.json())
-      .then((json) => {
-        console.log(json);
-        if (isLoadSuccessRes(json)) {
-          resolve(json.filepath);
-        } else if (isLoadFailRes(json)) {
-          resolve(json.error_message);
-        } else {
-          resolve("Return type was not a valid response type.");
-        }
-      })
-      .catch((e) => {
-        resolve(e.message);
-      });
-  });
+    const colorScheme = colorApiJSON.colors;
+    var hexVals = [];
+    for (let i = 0; i < 4; i++) {
+      let val = colorScheme[i].hex.value;
+      hexVals.push(val);
+    }
+    resolve(hexVals);
+  })
+  // return hexVals;
+  // return new Promise((resolve, reject) => {
+  //   fetch("https://www.thecolorapi.com/scheme?hex=" + keyword)
+  //     .then((response) => response.json())
+  //     .then((json) => {
+  //       console.log(json);
+  //       resolve(json);
+  //       // if (isLoadSuccessRes(json)) {
+  //       //   resolve(json.filepath);
+  //       // } else if (isLoadFailRes(json)) {
+  //       //   resolve(json.error_message);
+  //       // } else {
+  //       //   resolve("Return type was not a valid response type.");
+  //       // }
+  //     })
+  //     .catch((e) => {
+  //       resolve(e.message);
+  //     });
+  // });
 }
 
 function fontAPICall(keyword: string): Promise<string> {

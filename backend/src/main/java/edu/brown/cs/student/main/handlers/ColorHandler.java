@@ -43,7 +43,7 @@ public class ColorHandler implements Route {
 
   @Override
   public Object handle(Request request, Response response) throws Exception {
-    String colorKeyword = request.queryParams("col");
+    String colorKeyword = request.queryParams("keyword");
     if (colorKeyword.isEmpty()) {
       return new FailureResponse("error_bad_request", "Please enter keyword for color scheme").serialize();
     }
@@ -91,7 +91,7 @@ public class ColorHandler implements Route {
     double s = s_range[0] + (s_range[1] - s_range[0]) * r.nextDouble();
     double l = l_range[0] + (l_range[1] - l_range[0]) * r.nextDouble();
 
-    String res = "hsl=" + h + "," + s + "," + l;
+    String res = h + "," + s + "," + l;
     return res;
   }
 

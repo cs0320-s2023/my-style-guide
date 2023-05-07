@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/App.css";
 import StyleGuideBox from "./StyleGuideBox";
-import { searchColor, searchFont } from "../utils/elements";
+import { colorSearchAPICall, searchColor, searchFont } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
 interface SearchFormProps {
@@ -30,17 +30,20 @@ export default function SearchForm(props: SearchFormProps) {
   });
 
   const [formState, setFormState] = useState({
-    color: "Black",
+    color1: "Black",
+    color2: "Black",
+    color3: "Black",
+    color4: "Black",
     font: "Inter",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setFormState({
-      ...formState,
-      [e.target.name]: value,
-    });
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const value = e.target.value;
+  //   setFormState({
+  //     ...formState,
+  //     [e.target.name]: value,
+  //   });
+  // };
 
   // credit to https://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes/47355187#47355187
 
@@ -52,78 +55,65 @@ export default function SearchForm(props: SearchFormProps) {
     }
   }
 
-  // old method from ezra's stencil--not currently using
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    var hexColor = stringToHex(formState.color);
-    if (hexColor != null) {
-      hexColor = hexColor.substring(1);
-    }
-
-    let { color } = { ...formState };
-    let url = `http://localhost:3232/color?` + hexColor;
-    const responseJson = await searchColor(url);
-    if (responseJson != null) {
-      //setFormState(responseJson);
-      setOutputText("Displaying guide...");
-      console.log(hexColor);
-      // setDataText(
-      //   `Latitude range: [${minLat}, ${maxLat}] . . . Longitude range: [${minLon}, ${maxLon}]`
-      // );
-      document.documentElement.style.setProperty("--color-swatch-1", color);
-    } else {
-      setOutputText("responseJson");
-    }
-  };
-
   /**
    * Sets the style guide based on the search data using the keyword
    */
-  const handleSearch = (content: string) => {
+  async function handleSearch(content: string) {
     props.setHex([]);
     let tokens = content.split(" ");
     let colorKeyword = tokens[0];
     let fontKeyword = tokens[1];
 
-    let hexColor: string = stringToHex(colorKeyword)!;
-    if (hexColor != undefined) {
-      hexColor = hexColor.substring(1);
-    }
+    const serverBaseUrl: string = "http://localhost:3232";
+    const colorResponse = await fetch(
+      serverBaseUrl + "/color?keyword=" + colorKeyword
+    );
+    const colorResponseJSON = await colorResponse.json();
+    // check whether success or failure !!
+    const hslVal = colorResponseJSON.val;
 
-    searchColor(hexColor).then((data) => {
-      //console.log(data);
-      //console.log(colorKeyword);
-      setOutputText("Success!");
-    });
+    const colorApiCall = await fetch(
+      "https://www.thecolorapi.com/scheme?hsl=" + hslVal + "&count=4" 
+    );
+    const colorApiJSON = await colorApiCall.json();
+    const colorScheme = colorApiJSON.colors;
+    var hexVals = [];
+    for(let i = 0; i < 4; i++){
+      let val = colorScheme[i].hex.value;
+      hexVals.push(val);
+    }
+    props.setHex(hexVals);
 
     searchFont(fontKeyword).then((data) => {
       //console.log(fontKeyword);
     });
 
-    const hexList = [hexColor, "hex2", "hex3", "hex4"];
-    props.setHex(hexList);
-
-    setFormState({ color: "#" + hexColor, font: "Times New Roman" });
+    setFormState({
+      color1: hexVals[0],
+      color2: hexVals[1],
+      color3: hexVals[2],
+      color4: hexVals[3],
+      font: "Times New Roman",
+    });
     setDataText(colorKeyword + " " + fontKeyword);
   };
 
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--color-swatch-1",
-      formState.color
+      formState.color1
     );
     document.documentElement.style.setProperty(
       "--color-swatch-2",
-      formState.color
+      formState.color2
     );
     document.documentElement.style.setProperty(
       "--color-swatch-3",
-      formState.color
+      formState.color3
     );
     document.documentElement.style.setProperty(
       "--color-swatch-4",
-      formState.color
+      formState.color4
     );
     document.documentElement.style.setProperty("--header-1", formState.font);
     document.documentElement.style.setProperty("--header-2", formState.font);
@@ -157,67 +147,6 @@ export default function SearchForm(props: SearchFormProps) {
           </h4>
         </div>
       </div>
-
-      <form
-        onSubmit={handleSubmit}
-        role="search-form"
-        className="form-container"
-      >
-        <div>
-          <b>Categories</b>
-        </div>
-        <label>Color scheme:</label>
-        <select
-          name="dog-names"
-          id="dog-names"
-          value={formState.color}
-          onChange={handleInputChange}
-        >
-          <option value="red">Red</option>
-          <option value="orange">Orange</option>
-          <option value="yellow">Yellow</option>
-          <option value="green">Green</option>
-          <option value="blue">Blue</option>
-          <option value="black">Black</option>
-        </select>
-        <label>Font:</label>
-        <select
-          name="fonts"
-          id="fonts"
-          //value={formState.font}
-          onChange={handleInputChange}
-        >
-          <option value="comfortable">Comfortable</option>
-          <option value="bold">Bold</option>
-          <option value="light">Light</option>
-          <option value="smooth">Smooth</option>
-          <option value="classic">Classic</option>
-        </select>
-        <label> Theme: </label>
-        <select
-          name="themes"
-          id="themes"
-          //value={formState.theme}
-          onChange={handleInputChange}
-        >
-          <option value="education">Education</option>
-          <option value="health">Medical</option>
-          <option value="business">Business</option>
-          <option value="food">Food</option>
-          <option value="personal">Personal</option>
-        </select>
-
-        <button
-          role="generate-button"
-          aria-label="Generate Button"
-          aria-roledescription="Click here to generate style guide using your selected options."
-          className="button"
-          type="submit"
-          onClick={() => handleInputChange}
-        >
-          Generate Style Guide!
-        </button>
-      </form>
     </div>
   );
 }

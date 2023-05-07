@@ -6,10 +6,10 @@ import SearchForm from "./components/SearchForm";
 function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [hex, setHex] = useState<string[]>([
-    "000000",
-    "000000",
-    "000000",
-    "000000",
+    "#000000",
+    "#000000",
+    "#000000",
+    "#000000",
   ]);
 
   return (
