@@ -8,6 +8,9 @@
   --header-1: "Inter", sans-serif;
   --header-2: "Inter", sans-serif;
   --body: "Inter", sans-serif;
+  --button-primary: rgb(66, 116, 243);
+  --button-secondary: rgb(66, 116, 243);
+  --button-active: rgb(98, 139, 243);
 }
 
 .App {
@@ -40,6 +43,20 @@ h5 {
   font-size: 13px;
   margin-top: 0;
   margin-bottom: 10px;
+}
+
+p {
+  font-size: 3rem;
+  font-weight: 600;
+  font-family: var(--header-1);
+  margin: 0;
+}
+
+h6 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: var(--header-1);
+  margin: 0;
 }
 
 input {
@@ -76,6 +93,181 @@ button {
 button:hover {
   color: #fff;
   background: rgb(40, 98, 247);
+}
+
+.button-primary {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: var(--button-primary);
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-primary:hover {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: var(--button-primary);
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-primary-hover {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: var(--button-primary);
+  opacity: 80%;
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-primary-hover:hover {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: var(--button-primary);
+  opacity: 80%;
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-secondary {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  background-color: white;
+  color: var(--button-primary);
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border: 2px solid var(--button-primary);
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-secondary:hover {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  background-color: white;
+  color: var(--button-primary);
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 2px;
+  border-color: var(--button-primary);
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-active {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: var(--button-active);
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-active:hover {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: var(--button-active);
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-disabled {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: grey;
+  opacity: 80%;
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
+}
+
+.button-disabled:hover {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  color: #fff;
+  outline: none;
+  height: 35px;
+  text-align: center;
+  width: 100%;
+  border-radius: 5px;
+  border-width: 0px;
+  background: grey;
+  opacity: 80%;
+  text-shadow: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  padding: 0px;
 }
 
 .search-box {
@@ -132,12 +324,15 @@ button:hover {
 .style-guide-box-type {
   width: 30rem;
   display: grid;
-  grid-template-rows: 0.2fr 0.3fr 0.3fr;
+  grid-template-rows: 0.1fr 0.3fr 0.2fr 0.2fr 0.2fr 0.2fr;
 }
 
 .style-guide-box-button {
+  width: 15rem;
   display: grid;
+  grid-template-columns: 2fr 2fr;
   grid-template-rows: 0.2fr 0.2fr 0.2fr;
+  grid-gap: 10px;
 }
 
 .card {
@@ -193,18 +388,28 @@ button:hover {
 .typography-1 {
   font-family: var(--header-1);
   margin-bottom: 0.5rem;
-  font-size: 4rem;
+  font-size: 36px;
   text-align: start;
 }
 
 .typography-2 {
   font-family: var(--header-2);
-  font-size: 2.5rem;
+  font-size: 24px;
   text-align: start;
 }
 
 .typography-3 {
   font-family: var(--body);
-  font-size: 1rem;
+  font-size: 20px;
   text-align: start;
+}
+
+.typography-4 {
+  font-family: var(--body);
+  font-size: 14px;
+  text-align: start;
+}
+
+hr {
+  width: 80%;
 }

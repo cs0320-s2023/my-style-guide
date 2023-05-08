@@ -4,18 +4,18 @@ import StyleGuideBox from "./components/StyleGuideBox";
 import SearchForm from "./components/SearchForm";
 
 function App() {
-  const [searchResults, setSearchResults] = useState([]);
   const [hex, setHex] = useState<string[]>([
     "#000000",
     "#000000",
     "#000000",
     "#000000",
   ]);
+  const [font, setFont] = useState("Inter");
 
   return (
     <div className="App">
-      <SearchForm hex={hex} setHex={setHex} />
-      <StyleGuideBox hex={hex} />
+      <SearchForm hex={hex} setHex={setHex} font={font} setFont={setFont} />
+      <StyleGuideBox hex={hex} font={font} />
     </div>
   );
 }

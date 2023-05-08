@@ -5,6 +5,7 @@ import SearchForm from "./SearchForm";
 
 interface StyleGuideBoxProps {
   hex: string[];
+  font: string;
 }
 
 export default function StyleGuideBox(props: StyleGuideBoxProps) {
@@ -35,17 +36,25 @@ export default function StyleGuideBox(props: StyleGuideBoxProps) {
       </div>
 
       <div className="style-guide-box-wrapper-bottom">
-        <h5>FONTS</h5>
+        <h5>TYPEFACE</h5>
         <h5>BUTTONS</h5>
         <div className="style-guide-box-type" aria-live="assertive">
-          <div className="typography-1">Heading 1</div>
-          <div className="typography-2">Heading 2</div>
-          <div className="typography-3">Body</div>
+          <p>Aa</p>
+          <h6>{props.font}</h6>
+          <div className="typography-1">H1: 32px {props.font}</div>
+          <div className="typography-2">H2: 24px {props.font}</div>
+          <div className="typography-3">H3: 20px {props.font}</div>
+          <div className="typography-4">P: 16px {props.font}</div>
         </div>
         <div className="style-guide-box-button" aria-live="assertive">
-          <button>Primary</button>
-          <button>Secondary</button>
-          <button>Hover</button>
+          <button className="button-primary">Primary</button>
+          <button className="button-primary-hover">Hover</button>
+
+          <button className="button-secondary">Secondary</button>
+          <button className="button-primary">Hover</button>
+
+          <button className="button-active">Active</button>
+          <button className="button-disabled">Disabled</button>
         </div>
       </div>
     </div>

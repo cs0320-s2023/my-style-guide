@@ -1,21 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/App.css";
-import StyleGuideBox from "./StyleGuideBox";
-import { colorSearchAPICall, searchColor, searchFont } from "../utils/elements";
+import { searchFont } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
 interface SearchFormProps {
   hex: string[];
   setHex: React.Dispatch<React.SetStateAction<string[]>>;
+  font: string;
+  setFont: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // Function to render a form that contains an input box and a submit button
 export default function SearchForm(props: SearchFormProps) {
-  const [outputText, setOutputText] = useState(
-    "Select preferences to create a personalized style guide!"
-  );
+  const [outputText, setOutputText] = useState("Waiting for input...");
 
-  const [dataText, setDataText] = useState("none");
+  const [dataText, setDataText] = useState("");
   const keywordInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -64,7 +63,29 @@ export default function SearchForm(props: SearchFormProps) {
     let colorKeyword = tokens[0];
     let fontKeyword = tokens[1];
 
+    console.log(content);
+    console.log(colorKeyword);
+    console.log(fontKeyword);
+
+    if (colorKeyword == undefined || fontKeyword == undefined) {
+      setOutputText(
+        "Invalid input. Please enter a color and font keyword to continue!"
+      );
+      setDataText("");
+    } else {
+      setOutputText("Success!");
+      setDataText(
+        "Currently generating a style guide for:" +
+          " " +
+          colorKeyword +
+          " " +
+          fontKeyword
+      );
+    }
+
     const serverBaseUrl: string = "http://localhost:3232";
+
+    //api call for color
     const colorResponse = await fetch(
       serverBaseUrl + "/color?keyword=" + colorKeyword
     );
@@ -73,30 +94,35 @@ export default function SearchForm(props: SearchFormProps) {
     const hslVal = colorResponseJSON.val;
 
     const colorApiCall = await fetch(
-      "https://www.thecolorapi.com/scheme?hsl=" + hslVal + "&count=4" 
+      "https://www.thecolorapi.com/scheme?hsl=" + hslVal + "&count=4"
     );
     const colorApiJSON = await colorApiCall.json();
     const colorScheme = colorApiJSON.colors;
     var hexVals = [];
-    for(let i = 0; i < 4; i++){
+    for (let i = 0; i < 4; i++) {
       let val = colorScheme[i].hex.value;
       hexVals.push(val);
     }
     props.setHex(hexVals);
 
-    searchFont(fontKeyword).then((data) => {
-      //console.log(fontKeyword);
-    });
+    //api call for font
+    const fontResponse = await fetch(
+      serverBaseUrl + "/font?adj=" + fontKeyword
+    );
+    const fontResponseJSON = await fontResponse.json();
+    // check whether success or failure !!
+    const font = fontResponseJSON.font;
+    console.log(fontResponseJSON.font); // getting undefined
+    props.setFont("Times New Roman");
 
     setFormState({
       color1: hexVals[0],
       color2: hexVals[1],
       color3: hexVals[2],
       color4: hexVals[3],
-      font: "Times New Roman",
+      font: font,
     });
-    setDataText(colorKeyword + " " + fontKeyword);
-  };
+  }
 
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -114,6 +140,18 @@ export default function SearchForm(props: SearchFormProps) {
     document.documentElement.style.setProperty(
       "--color-swatch-4",
       formState.color4
+    );
+    document.documentElement.style.setProperty(
+      "--button-primary",
+      formState.color1
+    );
+    document.documentElement.style.setProperty(
+      "--button-secondary",
+      formState.color1
+    );
+    document.documentElement.style.setProperty(
+      "--button-active",
+      formState.color2
     );
     document.documentElement.style.setProperty("--header-1", formState.font);
     document.documentElement.style.setProperty("--header-2", formState.font);
@@ -136,14 +174,18 @@ export default function SearchForm(props: SearchFormProps) {
 
       <SearchBox onSearch={handleSearch} />
 
+      <hr></hr>
+
       <div className="left-container">
         <div>
-          <h4>Result: {outputText}</h4>
+          <h4>
+            <b>{outputText}</b>
+          </h4>
         </div>
 
         <div>
           <h4>
-            Currently generating a style guide for: <b>{dataText}</b>
+            <b>{dataText}</b>
           </h4>
         </div>
       </div>
