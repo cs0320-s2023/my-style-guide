@@ -54,7 +54,7 @@ export default function SearchForm(props: SearchFormProps) {
     console.log(colorKeyword);
     console.log(fontKeyword);
 
-    const serverBaseUrl: string = "http://localhost:3100";
+    const serverBaseUrl: string = "http://localhost:3232";
 
     // //api call for color
     // const colorResponse = await fetch(
@@ -100,6 +100,7 @@ export default function SearchForm(props: SearchFormProps) {
     const fontResponseJson = await callAPI(fontURL);
     console.log(fontResponseJson);
     //this is where I think i'm not checking for success and failure correctly?
+    //this is also not working rn
     if (fontResponseJson != undefined) {
       const fontResponse = await fontSearchAPICall(fontResponseJson);
       props.setFont(fontResponse);
