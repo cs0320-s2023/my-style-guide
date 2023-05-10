@@ -38,9 +38,10 @@ export function callAPI(url: string): Promise<string> {
     fetch(url)
       .then((response) => response.json())
       .then((json) => {
-        console.log(json);
+        // console.log(json);
         if (isLoadSuccessRes(json)) {
           console.log("success response");
+          console.log(json.val);
           resolve(json.val);
         } else if (isLoadFailRes(json)) {
           console.log("failure response");
@@ -91,4 +92,13 @@ export function isLoadFailRes(rjson: any): rjson is LoadFailureResponse {
   if (!("result" in rjson)) return false;
   if (!("error_message" in rjson)) return false;
   return true;
+}
+
+/**
+ * Function to check if a string contains numbers
+ * @param str - string input 
+ * @returns boolean (true if str contains numbers)
+ */
+export function isNumeric(str: string) {
+  return /\d/.test(str);
 }

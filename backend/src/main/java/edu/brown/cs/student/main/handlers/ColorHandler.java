@@ -45,12 +45,12 @@ public class ColorHandler implements Route {
   public Object handle(Request request, Response response) throws Exception {
     String colorKeyword = request.queryParams("keyword");
     if (colorKeyword.isEmpty()) {
-      return new FailureResponse("error_bad_request", "Please enter keyword for color scheme").serialize();
+      return new FailureResponse("error_bad_request", "Please enter keyword for color scheme.").serialize();
     }
 
     String colorQuery = this.getColorFromInput(colorKeyword);
     if (colorQuery == null) {
-      return new FailureResponse("error_bad_request", "Try a different keyword").serialize();
+      return new FailureResponse("error_bad_request", "Try a different color keyword!").serialize();
     }
     try {
 //      ColorScheme res = this.getColorScheme(colorKeyword, "monochrome", 4);
@@ -107,21 +107,6 @@ public class ColorHandler implements Route {
     }
     return false;
   }
-
-//  /**
-//   * Retrieves color scheme response from the Color API for the given RGB values and variables
-//   *
-//   * @param hsl target color (seed) hsl value
-//   * @param mode color scheme type
-//   * @param count length of color scheme
-//   * @return JSON response stored as a ColorScheme record
-//   * @throws IOException if an error occurs upon request
-//   */
-//  public ColorScheme getColorScheme(String hsl, String mode, int count) throws IOException {
-//    String schemeURL = "https://www.thecolorapi.com/scheme?"+hsl+"&mode="+mode+"&count="+count;
-//    ColorScheme schemeResponse = this.proxy.callAPI(schemeURL, ColorScheme.class);
-//    return schemeResponse;
-//  }
 
   /**
    * Success response for keyword search. Serializes the result ("success") and the search response.

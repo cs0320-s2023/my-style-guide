@@ -2,10 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import "../styles/App.css";
 import {
   callAPI,
-  isLoadSuccessRes,
   colorSearchAPICall,
   fontSearchAPICall,
-  isLoadFailRes,
+  isNumeric,
 } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
@@ -78,9 +77,8 @@ export default function SearchForm(props: SearchFormProps) {
 
     const colorUrl = serverBaseUrl + "/color?keyword=" + colorKeyword;
     const colorResponseJson = await callAPI(colorUrl);
-    console.log(colorResponseJson);
-    //this is where I think i'm not checking for success and failure correctly?
-    if (colorResponseJson != undefined) {
+    
+    if (isNumeric(colorResponseJson)) {
       const colorScheme = await colorSearchAPICall(colorResponseJson);
       props.setHex(colorScheme);
       setFormState({
@@ -92,7 +90,7 @@ export default function SearchForm(props: SearchFormProps) {
       });
       setOutputText("Displaying guide...");
     } else {
-      setOutputText("Please input a valid keyword!");
+      setOutputText(colorResponseJson);
     }
 
     //api call for font
