@@ -1,35 +1,3 @@
-//import { REPLFunction } from "../REPLFunction.js";
-
-/**
- * For making the API call to gather the overlay data upon a search
- * @param keyword
- * @returns
- */
-// export async function searchColor(
-//   keyword: string
-// ): Promise<string | undefined> {
-//   return new Promise((resolve, reject) => {
-//     colorSearchAPICall(keyword).then((data) => {
-//       const json = JSON.parse(data);
-//       resolve(json);
-//     });
-//   });
-// }
-
-/**
- * For making the API call to gather the overlay data upon a search
- * @param keyword
- * @returns
- */
-export async function searchFont(keyword: string): Promise<string | undefined> {
-  return new Promise((resolve, reject) => {
-    fontAPICall(keyword).then((rl_data) => {
-      //const rl_json = JSON.parse(rl_data);
-      resolve("success");
-    });
-  });
-}
-
 /**
  * Makes API call to the backend in order to gather the data relevant to the user's
  * search which will be overlayed on the orginal data
@@ -49,37 +17,33 @@ export async function colorSearchAPICall(hslVal: string): Promise<string[]> {
       hexVals.push(val);
     }
     resolve(hexVals);
-  })
-  // return hexVals;
-  // return new Promise((resolve, reject) => {
-  //   fetch("https://www.thecolorapi.com/scheme?hex=" + keyword)
-  //     .then((response) => response.json())
-  //     .then((json) => {
-  //       console.log(json);
-  //       resolve(json);
-  //       // if (isLoadSuccessRes(json)) {
-  //       //   resolve(json.filepath);
-  //       // } else if (isLoadFailRes(json)) {
-  //       //   resolve(json.error_message);
-  //       // } else {
-  //       //   resolve("Return type was not a valid response type.");
-  //       // }
-  //     })
-  //     .catch((e) => {
-  //       resolve(e.message);
-  //     });
-  // });
+  });
 }
 
-function fontAPICall(keyword: string): Promise<string> {
+export async function fontSearchAPICall(keyword: string): Promise<string> {
+  const fontApiCall = await fetch(
+    "https://fonts.googleapis.com/css2?family=" +
+      keyword +
+      "&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  );
+  const fontApiJson = await fontApiCall.json();
   return new Promise((resolve, reject) => {
-    fetch("http://localhost:3232/font?adj=" + keyword)
+    const font = fontApiJson.font;
+    resolve(font);
+  });
+}
+
+export function callAPI(url: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fetch(url)
       .then((response) => response.json())
       .then((json) => {
         console.log(json);
         if (isLoadSuccessRes(json)) {
-          resolve(json.filepath);
+          console.log("success response");
+          resolve(json.val);
         } else if (isLoadFailRes(json)) {
+          console.log("failure response");
           resolve(json.error_message);
         } else {
           resolve("Return type was not a valid response type.");
@@ -96,7 +60,7 @@ function fontAPICall(keyword: string): Promise<string> {
  */
 interface LoadSuccessResponse {
   result: string;
-  filepath: string;
+  val: string;
 }
 
 /**
@@ -112,9 +76,9 @@ interface LoadFailureResponse {
  * @param rjson - JSON response from the backend
  * @returns - boolean, true if the response is a LoadSuccessResponse
  */
-function isLoadSuccessRes(rjson: any): rjson is LoadSuccessResponse {
+export function isLoadSuccessRes(rjson: any): rjson is LoadSuccessResponse {
   if (!("result" in rjson)) return false;
-  if (!("filepath" in rjson)) return false;
+  if (!("val" in rjson)) return false;
   return true;
 }
 
@@ -123,7 +87,7 @@ function isLoadSuccessRes(rjson: any): rjson is LoadSuccessResponse {
  * @param rjson - JSON response from the backend
  * @returns - boolean, true if the response is a LoadFailureResponse
  */
-function isLoadFailRes(rjson: any): rjson is LoadFailureResponse {
+export function isLoadFailRes(rjson: any): rjson is LoadFailureResponse {
   if (!("result" in rjson)) return false;
   if (!("error_message" in rjson)) return false;
   return true;

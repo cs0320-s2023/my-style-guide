@@ -1,6 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/App.css";
-import { searchFont } from "../utils/elements";
+import {
+  callAPI,
+  isLoadSuccessRes,
+  colorSearchAPICall,
+  fontSearchAPICall,
+  isLoadFailRes,
+} from "../utils/elements";
 import SearchBox from "./SearchBox";
 
 interface SearchFormProps {
@@ -13,7 +19,6 @@ interface SearchFormProps {
 // Function to render a form that contains an input box and a submit button
 export default function SearchForm(props: SearchFormProps) {
   const [outputText, setOutputText] = useState("Waiting for input...");
-
   const [dataText, setDataText] = useState("");
   const keywordInputRef = useRef<HTMLInputElement>(null);
 
@@ -36,24 +41,6 @@ export default function SearchForm(props: SearchFormProps) {
     font: "Inter",
   });
 
-  // const handleInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const value = e.target.value;
-  //   setFormState({
-  //     ...formState,
-  //     [e.target.name]: value,
-  //   });
-  // };
-
-  // credit to https://stackoverflow.com/questions/1573053/javascript-function-to-convert-color-names-to-hex-codes/47355187#47355187
-
-  function stringToHex(color: string) {
-    var ctx = document.createElement("canvas").getContext("2d");
-    if (ctx != null) {
-      ctx.fillStyle = color;
-      return ctx.fillStyle;
-    }
-  }
-
   /**
    * Sets the style guide based on the search data using the keyword
    */
@@ -67,63 +54,71 @@ export default function SearchForm(props: SearchFormProps) {
     console.log(colorKeyword);
     console.log(fontKeyword);
 
-    if (colorKeyword == undefined || fontKeyword == undefined) {
-      setOutputText(
-        "Invalid input. Please enter a color and font keyword to continue!"
-      );
-      setDataText("");
+    const serverBaseUrl: string = "http://localhost:3100";
+
+    // //api call for color
+    // const colorResponse = await fetch(
+    //   serverBaseUrl + "/color?keyword=" + colorKeyword
+    // );
+    // const colorResponseJSON = await colorResponse.json();
+    // // check whether success or failure !!
+    // const hslVal = colorResponseJSON.val;
+
+    // const colorApiCall = await fetch(
+    //   "https://www.thecolorapi.com/scheme?hsl=" + hslVal + "&count=4"
+    // );
+    // const colorApiJSON = await colorApiCall.json();
+    // const colorScheme = colorApiJSON.colors;
+    // var hexVals = [];
+    // for (let i = 0; i < 4; i++) {
+    //   let val = colorScheme[i].hex.value;
+    //   hexVals.push(val);
+    // }
+    // props.setHex(hexVals);
+
+    const colorUrl = serverBaseUrl + "/color?keyword=" + colorKeyword;
+    const colorResponseJson = await callAPI(colorUrl);
+    console.log(colorResponseJson);
+    //this is where I think i'm not checking for success and failure correctly?
+    if (colorResponseJson != undefined) {
+      const colorScheme = await colorSearchAPICall(colorResponseJson);
+      props.setHex(colorScheme);
+      setFormState({
+        color1: colorScheme[0],
+        color2: colorScheme[1],
+        color3: colorScheme[2],
+        color4: colorScheme[3],
+        font: props.font,
+      });
+      setOutputText("Displaying guide...");
     } else {
-      setOutputText("Success!");
-      setDataText(
-        "Currently generating a style guide for:" +
-          " " +
-          colorKeyword +
-          " " +
-          fontKeyword
-      );
+      setOutputText("Please input a valid keyword!");
     }
-
-    const serverBaseUrl: string = "http://localhost:3232";
-
-    //api call for color
-    const colorResponse = await fetch(
-      serverBaseUrl + "/color?keyword=" + colorKeyword
-    );
-    const colorResponseJSON = await colorResponse.json();
-    // check whether success or failure !!
-    const hslVal = colorResponseJSON.val;
-
-    const colorApiCall = await fetch(
-      "https://www.thecolorapi.com/scheme?hsl=" + hslVal + "&count=4"
-    );
-    const colorApiJSON = await colorApiCall.json();
-    const colorScheme = colorApiJSON.colors;
-    var hexVals = [];
-    for (let i = 0; i < 4; i++) {
-      let val = colorScheme[i].hex.value;
-      hexVals.push(val);
-    }
-    props.setHex(hexVals);
 
     //api call for font
-    const fontResponse = await fetch(
-      serverBaseUrl + "/font?adj=" + fontKeyword
-    );
-    const fontResponseJSON = await fontResponse.json();
-    // check whether success or failure !!
-    const font = fontResponseJSON.font;
-    console.log(fontResponseJSON.font); // getting undefined
-    props.setFont("Times New Roman");
-
-    setFormState({
-      color1: hexVals[0],
-      color2: hexVals[1],
-      color3: hexVals[2],
-      color4: hexVals[3],
-      font: font,
-    });
+    const fontURL = serverBaseUrl + "/font?adj=" + fontKeyword;
+    const fontResponseJson = await callAPI(fontURL);
+    console.log(fontResponseJson);
+    //this is where I think i'm not checking for success and failure correctly?
+    if (fontResponseJson != undefined) {
+      const fontResponse = await fontSearchAPICall(fontResponseJson);
+      props.setFont(fontResponse);
+      setFormState({
+        color1: props.hex[0],
+        color2: props.hex[1],
+        color3: props.hex[2],
+        color4: props.hex[3],
+        font: fontResponse,
+      });
+      setOutputText("Displaying guide...");
+    } else {
+      setOutputText("Please input a valid keyword!");
+    }
   }
 
+  /**
+   * Updates the UI to reflect the generated style guide
+   */
   useEffect(() => {
     document.documentElement.style.setProperty(
       "--color-swatch-1",
@@ -156,7 +151,7 @@ export default function SearchForm(props: SearchFormProps) {
     document.documentElement.style.setProperty("--header-1", formState.font);
     document.documentElement.style.setProperty("--header-2", formState.font);
     document.documentElement.style.setProperty("--body", formState.font);
-  });
+  }, [formState]);
 
   return (
     <div>

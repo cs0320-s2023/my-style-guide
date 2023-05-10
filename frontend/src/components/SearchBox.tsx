@@ -25,6 +25,7 @@ function SearchBox(props: SearchBoxProps) {
   return (
     <form className="search-box" onSubmit={handleSubmit}>
       <input
+        role="search-box"
         aria-label="Search box"
         aria-description="Input your search keyword here, followed by clicking the search button or pressing enter"
         type="text"
@@ -33,6 +34,7 @@ function SearchBox(props: SearchBoxProps) {
         onChange={handleInput}
       />
       <button
+        role="button"
         type="submit"
         aria-label="Search button"
         aria-description="Button to be pressed after keyword entered in input box"

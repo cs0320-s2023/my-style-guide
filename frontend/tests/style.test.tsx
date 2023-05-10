@@ -1,31 +1,48 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
+import App from "../src/App";
+import userEvent from "@testing-library/user-event";
 import SearchForm from "../src/components/SearchForm";
 import StyleGuideBox from "../src/components/StyleGuideBox";
-import { getSearchOverlayMock } from "../src/utils/overlays";
 
-describe("Render SearchForm and StyleGuideBox", () => {
-  test("MapBox and input component display without crashing", () => {
-    //render(<SearchForm />);
-    //render(<StyleGuideBox />);
-    const searchForm = screen.getByRole("search-form");
+let input: HTMLInputElement;
+let button: HTMLElement;
+
+// set up test environment
+beforeEach(() => {
+  render(<App />);
+  input = screen.getByRole("search-box", { name: "Search box" });
+  button = screen.getByRole("button", { name: "Search button" });
+});
+
+describe("render SearchForm and StyleGuideBox", () => {
+  test("SearchForm and StyleGuideBox display without crashing", () => {
+    const searchForm = screen.getByRole("search-box");
     const styleGuideBox = screen.getByRole("style-guide-box");
     expect(searchForm).toBeInTheDocument();
     expect(styleGuideBox).toBeInTheDocument();
   });
 });
 
-describe("test mock for LoadSuccessResponse", () => {
-  test("returns a valid OverlayResponse for a known location", async () => {
-    const mockResponse = await getSearchOverlayMock("Providence");
-    expect(mockResponse).toBeDefined();
+describe("render colors", () => {
+  test("SearchForm and StyleGuideBox display without crashing", () => {
+    const color1 = screen.getByRole("color-swatch-1");
+    const color2 = screen.getByRole("color-swatch-2");
+    const color3 = screen.getByRole("color-swatch-3");
+    const color4 = screen.getByRole("color-swatch-4");
+    expect(color1).toBeInTheDocument();
+    expect(color2).toBeInTheDocument();
+    expect(color3).toBeInTheDocument();
+    expect(color4).toBeInTheDocument();
   });
 });
 
-describe("test mock for MapFailureResponse", () => {
-  test("returns a valid OverlayResponse for a known location", async () => {
-    const mockResponse = await getSearchOverlayMock("undefinedKey");
-    expect(mockResponse).toBeDefined();
-  });
+test("user input valid", async () => {
+  let user = userEvent.setup();
+  await user.type(input, "red hi");
+  await user.click(button);
+  expect(
+    await screen.findByText("Currently generating a style guide for: red hi")
+  ).toBeInTheDocument();
 });
