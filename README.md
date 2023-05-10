@@ -20,4 +20,16 @@
 
 ## Tests:
 
-## How to run: 
+## How to run:
+
+Open Server.java in backend and click run. The message "Server Started" should be printed in terminal.
+
+Run the following commands in terminal.
+
+```
+npm install
+
+cd frontend
+npm run dev
+
+```
