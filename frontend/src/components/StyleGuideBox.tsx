@@ -11,27 +11,6 @@ interface StyleGuideBoxProps {
 
 export default function StyleGuideBox(props: StyleGuideBoxProps) {
 
-  /**const [subText, setSubtext] = useState("inter");
-
-  var headerStyle = {
-    fontFamily: props.font,
-  };
-
-  var fontStyle = {
-    fontFamily: subText,
-  };
-
-  useEffect(() => {     
-    if(props.serif == "sans-serif"){
-      setSubtext(props.font)
-    }else{
-      setSubtext("inter");
-    }
-  },[props.font])
-  **/
-
-
-
   return (
     <div
       className="style-guide-box-wrapper"
@@ -62,20 +41,12 @@ export default function StyleGuideBox(props: StyleGuideBoxProps) {
         <h5>TYPEFACE</h5>
         <h5>BUTTONS</h5>
         <div className="style-guide-box-type" aria-live="assertive">
-          <p >Aa</p>
-          <h6 >{props.font}</h6>
-          <div className="typography-1" >
-            H1: 32px 
-          </div>
-          <div className="typography-2" >
-            H2: 24px 
-          </div>
-          <div className="typography-3" >
-            H3: 20px 
-          </div>
-          <div className="typography-4" >
-            P: 16px 
-          </div>
+          <p>Aa</p>
+          <h6>{props.font}</h6>
+          <div className="typography-1">H1: 32px</div>
+          <div className="typography-2">H2: 24px</div>
+          <div className="typography-3">H3: 20px</div>
+          <div className="typography-4">P: 16px</div>
         </div>
         <div className="style-guide-box-button" aria-live="assertive">
           <button className="button-primary">Primary</button>

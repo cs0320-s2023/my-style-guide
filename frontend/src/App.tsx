@@ -12,12 +12,18 @@ function App() {
   ]);
   const [font, setFont] = useState("Inter");
   const [serif, setSerif] = useState("sans-serif");
+  const [url, setUrl] = useState("https://fonts.googleapis.com/css?family=inter")
+
+
+  useEffect(() => {
+    setUrl("https://fonts.googleapis.com/css?family=" + font);
+  },[font]);
 
   return (
     <div className="App">
       <link
         rel="stylesheet"
-        href={"https://fonts.googleapis.com/css?family=" + font}
+        href={url}
       ></link>
       <SearchForm
         hex={hex}

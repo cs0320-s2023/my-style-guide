@@ -19,13 +19,13 @@ import java.util.Map;
 
 
 public class FontHandler implements Route {
-
+    public int _gptCount = 0;
     private final String FONT_API_KEY = Constants.FONT_KEY;
 
     @Override
     public Object handle(Request request, Response response) {
         try {
-            return this.fontInfo(this.fontify(request));
+            return this.fontInfo(this.fontify(request), request);
         } catch (Exception e) {
             Map<String, Object> map = new HashMap<>();
             map.put("result", "error_bad_json");
@@ -33,7 +33,6 @@ public class FontHandler implements Route {
             return Serializer.serializeFailure(map);
         }
     }
-
 
     public String fontify(Request request) throws Exception {
         String url = "https://api.openai.com/v1/completions";
@@ -48,7 +47,7 @@ public class FontHandler implements Route {
 
         Map<String,Object > data = new HashMap<>();
         data.put("model", "text-davinci-003");
-        data.put("prompt", "A google font for the header of a " + descriptor + " website:\n\n google-font: #");
+        data.put("prompt", "Choose a google font given an adjective. \n\nSexy:Lora\nRugged:Special Elite\nsilly:Comic Neue\n"+descriptor+":");
         data.put("max_tokens", 200);
         data.put("temperature", .9);
 
@@ -68,9 +67,10 @@ public class FontHandler implements Route {
         return output;
     }
 
-    public String fontInfo(String gptFont) throws IOException {
+    public String fontInfo(String gptFont, Request request) throws Exception {
         System.out.println(gptFont);
         String font = gptFont.trim().replace(" ","+").replace("\"", "").replace("'", "");
+        System.out.println(font);
         String url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCj_Mhke0zUczf0viyXaHvAgrwn_ww3288&family="+font;
         try{
             HttpURLConnection fontConnection = (HttpURLConnection) new URL(url).openConnection();
@@ -91,8 +91,14 @@ public class FontHandler implements Route {
             return new FontSuccessResponse(font,fontResponse.items.get(0).category).serialize();
 
         } catch (Exception e) {
+
+            if(this._gptCount <4){
+                this.fontInfo(this.fontify(request), request);
+                this._gptCount++;
+            }
             return new FontFailureResponse("Error",e.getMessage()).serialize();
         }
+
     }
 
     public record FontFailureResponse(String result, String error_message) {
