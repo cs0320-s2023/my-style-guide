@@ -91,7 +91,7 @@ export default function SearchForm(props: SearchFormProps) {
         color3: colorScheme[2],
         color4: colorScheme[3],
         headerFont: props.font,
-        subFont: "inter",
+        subFont: props.font,
         style: props.serif,
       });
       setOutputText("Displaying guide...");
@@ -105,8 +105,12 @@ export default function SearchForm(props: SearchFormProps) {
       serverBaseUrl + "/font?adj=" + fontKeyword
     );
     let json = await fontResponseJson.json();
-    const font:string = json.font
-    const style:string = json.style
+    const parsedFont:string = json.font;
+    console.log(parsedFont);
+    const font: string = parsedFont.split("+").join(" ")
+    console.log(font);
+    console.log("heyyyy");
+    const style:string = json.style;
     
     if (font != undefined) {
       props.setFont(font);
