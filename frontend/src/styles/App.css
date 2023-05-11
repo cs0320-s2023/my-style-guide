@@ -320,7 +320,7 @@ button:hover {
 }
 
 .style-guide-box-colors {
-  height: 7rem;
+  height: 11rem;
   width: 55rem;
   display: grid;
   grid-template-columns: auto auto auto auto;
