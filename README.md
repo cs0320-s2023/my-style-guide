@@ -12,6 +12,8 @@
 
 ## Design choices:
 
+
+
 #### Front end: 
 
 The front end is composed of two main components, one to take in user inputs and the other to display the results. The searchForm component contains one input text box for the user to enter one color and one font keyword to describe their desired UI design. The input is then tokenized and sent to the backend. The first token, the color, is passed to the backend and the hex values of 4 different colors are returned. The second token, the font keyword, is then passed to the backend which returns a font and style. The second component, StyleGuideBox, displays the data given by the backend. The four colors are displayed in their own boxes and labeled with their hex value. Below the four color boxes on the left side will be the name of the font given by the backend as well as examples of the font in four different sizes. On the right side, There will be six different buttons styled with the first and second color given from the backend. These buttons will all be slightly different to show how they would look under different states such as hover, active, or disabled.
@@ -26,6 +28,10 @@ The back end contains two main route handlers, a proxy handler, as well as a top
 ## Errors/Bugs:
 
 ## Tests:
+
+For testing the front end, we used the react testing library to check that each color element was being displayed correctly without crashing.
+
+On the back end, we used both unit and integration testing. For unit testing, that the RGB values would be correct for a certain color id. For integration testing, we gave sample to the colorHandler and checked the functionality and error handling of the class.
 
 ## How to run:
 
