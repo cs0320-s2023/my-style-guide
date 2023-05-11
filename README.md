@@ -19,7 +19,7 @@ The front end is composed of two main components, one to take in user inputs and
 
 #### Back end:
 
-The back end contains two main route handlers, a proxy handler, as well as a top level server class. The server class is used to start the server as well as to set any configurations.
+The back end contains two main route handlers, a proxy handler, as well as a top level server class. The server class is used to start the server as well as to set any configurations. The ColorHandler class handles the api call for the user's color input and returns a list of colors to be displayed on the front end. It works by having a JSON containing descriptions for each color. A filtered list is created containg colors with matching descriptions and then a color from the filtered list is chosen at random. The FontHandler class takes in the font description keyword and makes an api call to GPT3 which returns a specific a font from google's font library. A call is then made to google's fonts api which then returns a font family that can be used on the front end.
 
 
 
