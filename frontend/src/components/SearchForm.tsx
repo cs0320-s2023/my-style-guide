@@ -1,11 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/App.css";
-import {
-  callAPI,
-  colorSearchAPICall,
-  fontSearchAPICall,
-  isNumeric,
-} from "../utils/elements";
+import { callAPI, colorSearchAPICall, isNumeric } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
 interface SearchFormProps {
@@ -41,7 +36,7 @@ export default function SearchForm(props: SearchFormProps) {
     color4: "Black",
     headerFont: "Inter",
     subFont: "Inter",
-    style: "sans-serif"
+    style: "sans-serif",
   });
 
   /**
@@ -57,86 +52,57 @@ export default function SearchForm(props: SearchFormProps) {
     console.log(colorKeyword);
     console.log(fontKeyword);
 
-    const serverBaseUrl: string = "http://localhost:3333";
-
-    // //api call for color
-    // const colorResponse = await fetch(
-    //   serverBaseUrl + "/color?keyword=" + colorKeyword
-    // );
-    // const colorResponseJSON = await colorResponse.json();
-    // // check whether success or failure !!
-    // const hslVal = colorResponseJSON.val;
-
-    // const colorApiCall = await fetch(
-    //   "https://www.thecolorapi.com/scheme?hsl=" + hslVal + "&count=4"
-    // );
-    // const colorApiJSON = await colorApiCall.json();
-    // const colorScheme = colorApiJSON.colors;
-    // var hexVals = [];
-    // for (let i = 0; i < 4; i++) {
-    //   let val = colorScheme[i].hex.value;
-    //   hexVals.push(val);
-    // }
-    // props.setHex(hexVals);
+    const serverBaseUrl: string = "http://localhost:3100";
 
     const colorUrl = serverBaseUrl + "/color?keyword=" + colorKeyword;
     const colorResponseJson = await callAPI(colorUrl);
-    
+    const colorScheme = await colorSearchAPICall(colorResponseJson);
+
     if (isNumeric(colorResponseJson)) {
-      const colorScheme = await colorSearchAPICall(colorResponseJson);
       props.setHex(colorScheme);
-      setFormState({
-        color1: colorScheme[0],
-        color2: colorScheme[1],
-        color3: colorScheme[2],
-        color4: colorScheme[3],
-        headerFont: props.font,
-        subFont: props.font,
-        style: props.serif,
-      });
-      setOutputText("Displaying guide...");
     } else {
       setOutputText(colorResponseJson);
     }
-
 
     //font call
     let fontResponseJson = await fetch(
       serverBaseUrl + "/font?adj=" + fontKeyword
     );
     let json = await fontResponseJson.json();
-    const parsedFont:string = json.font;
+    const parsedFont: string = json.font;
     console.log(parsedFont);
-    const font: string = parsedFont.split("+").join(" ")
+    const font: string = parsedFont.split("+").join(" ");
     console.log(font);
     console.log("heyyyy");
-    const style:string = json.style;
-    
+    const style: string = json.style;
+
     if (font != undefined) {
       props.setFont(font);
       props.setSerif(style);
       console.log(font);
-
-      setFormState({
-        color1: props.hex[0],
-        color2: props.hex[1],
-        color3: props.hex[2],
-        color4: props.hex[3],
-        headerFont: font,
-        subFont: checkSerif(style), 
-        style: style
-      });
-      setOutputText("Displaying guide...");
     } else {
       setOutputText("Please input a valid keyword!");
     }
+
+    setFormState({
+      color1: colorScheme[0],
+      color2: colorScheme[1],
+      color3: colorScheme[2],
+      color4: colorScheme[3],
+      headerFont: font,
+      subFont: checkSerif(style),
+      style: style,
+    });
+    setOutputText(
+      "Displaying guide for: " + " " + colorKeyword + " " + fontKeyword
+    );
   }
 
-  function checkSerif(style:string){
-    if(style == "sans-serif"){
+  function checkSerif(style: string) {
+    if (style == "sans-serif") {
       return props.font;
-    }else{
-      return "Inter"
+    } else {
+      return "Inter";
     }
   }
 
@@ -172,7 +138,10 @@ export default function SearchForm(props: SearchFormProps) {
       "--button-active",
       formState.color2
     );
-    document.documentElement.style.setProperty("--header", formState.headerFont);
+    document.documentElement.style.setProperty(
+      "--header",
+      formState.headerFont
+    );
     document.documentElement.style.setProperty("--body", formState.subFont);
   }, [formState]);
 
@@ -184,11 +153,10 @@ export default function SearchForm(props: SearchFormProps) {
         </h3>
         <h4>
           Create a unique UI style guide with guide! Just input a desired{" "}
-          <b>color</b> and <b>theme</b> to get a custom ui with colors and
-          fonts.
+          <b>color</b> and <b>vibe</b> to get a custom ui with colors and fonts.
         </h4>
         <h4>
-          For example: <b>crimson professional</b>
+          For example: <b>red professional</b>
         </h4>
       </div>
 
