@@ -61,7 +61,7 @@ export default function SearchForm(props: SearchFormProps) {
     if (isNumeric(colorResponseJson)) {
       props.setHex(colorScheme);
     } else {
-      setOutputText(colorResponseJson);
+      setOutputText("Invalid input: " + colorResponseJson);
     }
 
     //font call
