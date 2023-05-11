@@ -42,10 +42,10 @@ export default function StyleGuideBox(props: StyleGuideBoxProps) {
         <div className="style-guide-box-type" aria-live="assertive">
           <p>Aa</p>
           <h6>{props.font}</h6>
-          <div className="typography-1">H1 Heading 1 | 32px</div>
-          <div className="typography-2">H2 Heading 2 | 24px</div>
-          <div className="typography-3">H3 Heading 3 | 20px</div>
-          <div className="typography-4">P1 Body | 16px</div>
+          <div className="typography-1">H1 Heading 1 - 32px</div>
+          <div className="typography-2">H2 Heading 2 - 24px</div>
+          <div className="typography-3">H3 Heading 3 - 20px</div>
+          <div className="typography-4">P1 Body - 16px</div>
         </div>
         <div className="style-guide-box-button" aria-live="assertive">
           <button className="button-primary">Primary</button>
