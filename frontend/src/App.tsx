@@ -11,11 +11,23 @@ function App() {
     "#000000",
   ]);
   const [font, setFont] = useState("Inter");
+  const [serif, setSerif] = useState("sans-serif");
 
   return (
     <div className="App">
-      <SearchForm hex={hex} setHex={setHex} font={font} setFont={setFont} />
-      <StyleGuideBox hex={hex} font={font} />
+      <link
+        rel="stylesheet"
+        href={"https://fonts.googleapis.com/css?family=" + font}
+      ></link>
+      <SearchForm
+        hex={hex}
+        setHex={setHex}
+        font={font}
+        serif={serif}
+        setSerif={setSerif}
+        setFont={setFont}
+      />
+      <StyleGuideBox hex={hex} font={font} serif={serif} />
     </div>
   );
 }

@@ -25,7 +25,7 @@ public class FontHandler implements Route {
     @Override
     public Object handle(Request request, Response response) {
         try {
-            return this.fontInfo("Comic Sans");
+            return this.fontInfo(this.fontify(request));
         } catch (Exception e) {
             Map<String, Object> map = new HashMap<>();
             map.put("result", "error_bad_json");
@@ -50,7 +50,7 @@ public class FontHandler implements Route {
         data.put("model", "text-davinci-003");
         data.put("prompt", "A google font for the header of a " + descriptor + " website:\n\n google-font: #");
         data.put("max_tokens", 200);
-        data.put("temperature", .6);
+        data.put("temperature", .9);
 
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<Map<String, Object>> jsonAdapter = moshi.adapter(Types.newParameterizedType(Map.class, String.class, Object.class));
@@ -69,8 +69,8 @@ public class FontHandler implements Route {
     }
 
     public String fontInfo(String gptFont) throws IOException {
-        Map<String,String> fontInfo = new HashMap<>();
-        String font = gptFont.replace(" ","+");
+        System.out.println(gptFont);
+        String font = gptFont.trim().replace(" ","+").replace("\"", "").replace("'", "");
         String url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCj_Mhke0zUczf0viyXaHvAgrwn_ww3288&family="+font;
         try{
             HttpURLConnection fontConnection = (HttpURLConnection) new URL(url).openConnection();

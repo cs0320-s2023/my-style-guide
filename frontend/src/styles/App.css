@@ -1,17 +1,19 @@
 @import url("https://fonts.googleapis.com/css?family=Inter:300,400,500,700,900");
 
+
 :root {
   --color-swatch-1: rgb(33, 33, 220);
   --color-swatch-2: rgb(36, 36, 186);
   --color-swatch-3: rgb(76, 76, 210);
   --color-swatch-4: rgb(98, 92, 211);
-  --header-1: "Inter", sans-serif;
-  --header-2: "Inter", sans-serif;
-  --body: "Inter", sans-serif;
+  --header: "Inter";
+  --body: "Inter";
+  --style: "sans-serif";
   --button-primary: rgb(66, 116, 243);
   --button-secondary: rgb(66, 116, 243);
   --button-active: rgb(98, 139, 243);
 }
+
 
 .App {
   display: flex;
@@ -48,14 +50,14 @@ h5 {
 p {
   font-size: 3rem;
   font-weight: 600;
-  font-family: var(--header-1);
+  font-family: var(--header);
   margin: 0;
 }
 
 h6 {
   font-size: 1.5rem;
   font-weight: 400;
-  font-family: var(--header-1);
+  font-family: var(--header);
   margin: 0;
 }
 
@@ -295,6 +297,10 @@ button:hover {
   padding-left: 40px;
 }
 
+.logo-flair{
+  color:var(--color-swatch-3)
+}
+
 .style-guide-box-wrapper {
   background-color: rgb(253, 253, 253);
   height: 35rem;
@@ -326,6 +332,7 @@ button:hover {
   display: grid;
   grid-template-rows: 0.1fr 0.3fr 0.2fr 0.2fr 0.2fr 0.2fr;
 }
+
 
 .style-guide-box-button {
   width: 15rem;
@@ -386,14 +393,15 @@ button:hover {
 }
 
 .typography-1 {
-  font-family: var(--header-1);
+  font-family: var(--header), var(--style);
   margin-bottom: 0.5rem;
+  font-weight: bold;
   font-size: 36px;
   text-align: start;
 }
 
 .typography-2 {
-  font-family: var(--header-2);
+  font-family: var(--body);
   font-size: 24px;
   text-align: start;
 }

@@ -26,6 +26,7 @@ export async function fontSearchAPICall(keyword: string): Promise<string> {
       keyword +
       "&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
   );
+
   const fontApiJson = await fontApiCall.json();
   return new Promise((resolve, reject) => {
     const font = fontApiJson.font;

@@ -12,6 +12,8 @@ interface SearchFormProps {
   hex: string[];
   setHex: React.Dispatch<React.SetStateAction<string[]>>;
   font: string;
+  serif: string;
+  setSerif: React.Dispatch<React.SetStateAction<string>>;
   setFont: React.Dispatch<React.SetStateAction<string>>;
 }
 
@@ -37,7 +39,9 @@ export default function SearchForm(props: SearchFormProps) {
     color2: "Black",
     color3: "Black",
     color4: "Black",
-    font: "Inter",
+    headerFont: "Inter",
+    subFont: "Inter",
+    style: "sans-serif"
   });
 
   /**
@@ -53,7 +57,7 @@ export default function SearchForm(props: SearchFormProps) {
     console.log(colorKeyword);
     console.log(fontKeyword);
 
-    const serverBaseUrl: string = "http://localhost:3232";
+    const serverBaseUrl: string = "http://localhost:3333";
 
     // //api call for color
     // const colorResponse = await fetch(
@@ -86,32 +90,49 @@ export default function SearchForm(props: SearchFormProps) {
         color2: colorScheme[1],
         color3: colorScheme[2],
         color4: colorScheme[3],
-        font: props.font,
+        headerFont: props.font,
+        subFont: "inter",
+        style: props.serif,
       });
       setOutputText("Displaying guide...");
     } else {
       setOutputText(colorResponseJson);
     }
 
-    //api call for font
-    const fontURL = serverBaseUrl + "/font?adj=" + fontKeyword;
-    const fontResponseJson = await callAPI(fontURL);
-    console.log(fontResponseJson);
-    //this is where I think i'm not checking for success and failure correctly?
-    //this is also not working rn
-    if (fontResponseJson != undefined) {
-      const fontResponse = await fontSearchAPICall(fontResponseJson);
-      props.setFont(fontResponse);
+
+    //font call
+    let fontResponseJson = await fetch(
+      serverBaseUrl + "/font?adj=" + fontKeyword
+    );
+    let json = await fontResponseJson.json();
+    const font:string = json.font
+    const style:string = json.style
+    
+    if (font != undefined) {
+      props.setFont(font);
+      props.setSerif(style);
+      console.log(font);
+
       setFormState({
         color1: props.hex[0],
         color2: props.hex[1],
         color3: props.hex[2],
         color4: props.hex[3],
-        font: fontResponse,
+        headerFont: font,
+        subFont: checkSerif(style), 
+        style: style
       });
       setOutputText("Displaying guide...");
     } else {
       setOutputText("Please input a valid keyword!");
+    }
+  }
+
+  function checkSerif(style:string){
+    if(style == "sans-serif"){
+      return props.font;
+    }else{
+      return "Inter"
     }
   }
 
@@ -147,19 +168,20 @@ export default function SearchForm(props: SearchFormProps) {
       "--button-active",
       formState.color2
     );
-    document.documentElement.style.setProperty("--header-1", formState.font);
-    document.documentElement.style.setProperty("--header-2", formState.font);
-    document.documentElement.style.setProperty("--body", formState.font);
+    document.documentElement.style.setProperty("--header", formState.headerFont);
+    document.documentElement.style.setProperty("--body", formState.subFont);
   }, [formState]);
 
   return (
     <div>
       <div className="left-container">
-        <h3>My Style Guide</h3>
+        <h3>
+          g<span className="logo-flair">Ui</span>de
+        </h3>
         <h4>
-          Create a unique UI style guide with My Style Guide! Just input a
-          desired <b>color</b> and <b>theme</b> to get a custom style guide with
-          colors and fonts.
+          Create a unique UI style guide with guide! Just input a desired{" "}
+          <b>color</b> and <b>theme</b> to get a custom ui with colors and
+          fonts.
         </h4>
         <h4>
           For example: <b>crimson professional</b>
