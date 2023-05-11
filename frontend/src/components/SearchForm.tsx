@@ -81,7 +81,13 @@ export default function SearchForm(props: SearchFormProps) {
       props.setSerif(style);
       console.log(font);
     } else {
-      setOutputText("Please input a valid keyword!");
+      setOutputText(json);
+    }
+
+    if (isNumeric(colorResponseJson) && font != undefined) {
+      setOutputText(
+        "Displaying guide for: " + " " + colorKeyword + " " + fontKeyword
+      );
     }
 
     setFormState({
@@ -93,9 +99,6 @@ export default function SearchForm(props: SearchFormProps) {
       subFont: checkSerif(style),
       style: style,
     });
-    setOutputText(
-      "Displaying guide for: " + " " + colorKeyword + " " + fontKeyword
-    );
   }
 
   function checkSerif(style: string) {

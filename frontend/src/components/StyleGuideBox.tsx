@@ -20,7 +20,9 @@ export default function StyleGuideBox(props: StyleGuideBoxProps) {
       <div className="style-guide-box-colors" aria-live="assertive">
         <div className="card">
           <div className="color-swatch-1" role="color-swatch-1"></div>
-          <div className="hex-1">{props.hex[0]}</div>
+          <div className="hex-1" role="hex-1">
+            {props.hex[0]}
+          </div>
         </div>
         <div className="card">
           <div className="color-swatch-2" role="color-swatch-2"></div>
