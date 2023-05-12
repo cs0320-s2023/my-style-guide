@@ -20,7 +20,6 @@ import java.util.Map;
 
 public class FontHandler implements Route {
     public int _gptCount = 0;
-    private final String FONT_API_KEY = Constants.FONT_KEY;
 
     @Override
     public Object handle(Request request, Response response) {
@@ -96,7 +95,7 @@ public class FontHandler implements Route {
                 this.fontInfo(this.fontify(request), request);
                 this._gptCount++;
             }
-            return new FontFailureResponse("Error",e.getMessage()).serialize();
+            return new FontFailureResponse("Error","Error: Try using another keyword for your font!").serialize();
         }
 
     }

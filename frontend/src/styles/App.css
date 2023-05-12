@@ -404,13 +404,13 @@ button:hover {
 }
 
 .typography-3 {
-  font-family: var(--body);
+  font-family: var(--header), var(--style);
   font-size: 20px;
   text-align: start;
 }
 
 .typography-4 {
-  font-family: var(--body);
+  font-family: var(--header), var(--style);
   font-size: 16px;
   text-align: start;
 }

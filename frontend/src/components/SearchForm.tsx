@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/App.css";
-import { callAPI, colorSearchAPICall, isNumeric } from "../utils/elements";
+import { callAPI, colorSearchAPICall, isLoadFailRes, isNumeric } from "../utils/elements";
 import SearchBox from "./SearchBox";
 
 interface SearchFormProps {
@@ -45,6 +45,12 @@ export default function SearchForm(props: SearchFormProps) {
   async function handleSearch(content: string) {
     props.setHex([]);
     let tokens = content.split(" ");
+    
+    if (tokens.length != 2) {
+      setOutputText("Invalid input: Please enter exactly two (2) keywords.");
+      return;
+    }
+
     let colorKeyword = tokens[0];
     let fontKeyword = tokens[1];
 
@@ -52,53 +58,69 @@ export default function SearchForm(props: SearchFormProps) {
     console.log(colorKeyword);
     console.log(fontKeyword);
 
-    const serverBaseUrl: string = "http://localhost:3100";
+    const serverBaseUrl: string = "http://localhost:3333";
 
     const colorUrl = serverBaseUrl + "/color?keyword=" + colorKeyword;
     const colorResponseJson = await callAPI(colorUrl);
     const colorScheme = await colorSearchAPICall(colorResponseJson);
 
-    if (isNumeric(colorResponseJson)) {
-      props.setHex(colorScheme);
-    } else {
+    if (!isNumeric(colorResponseJson)) {
       setOutputText("Invalid input: " + colorResponseJson);
+      return;
     }
 
     //font call
     let fontResponseJson = await fetch(
       serverBaseUrl + "/font?adj=" + fontKeyword
     );
-    let json = await fontResponseJson.json();
-    const parsedFont: string = json.font;
-    console.log(parsedFont);
+    let fontJson = await fontResponseJson.json();
+    if (isLoadFailRes(fontJson)) {
+      console.log("here");
+      setOutputText(fontJson.error_message);
+      return;
+    } 
+    const parsedFont: string = fontJson.font;
     const font: string = parsedFont.split("+").join(" ");
-    console.log(font);
-    console.log("heyyyy");
-    const style: string = json.style;
+    const style: string = fontJson.style;
 
-    if (font != undefined) {
+    // if (font != undefined) {
+    //   props.setFont(font);
+    //   props.setSerif(style);
+    //   console.log(font);
+    // } else {
+    //   setOutputText("Error: Try another word input for your font!");
+    //   return;
+    // }
+
+    // let x = isNumeric(colorResponseJson) && !isLoadFailRes(fontJson);
+    // console.log(x);
+    if (isNumeric(colorResponseJson) && (!(isLoadFailRes(fontJson)))) {
+      props.setHex(colorScheme);
       props.setFont(font);
       props.setSerif(style);
-      console.log(font);
-    } else {
-      setOutputText(json);
-    }
-
-    if (isNumeric(colorResponseJson) && font != undefined) {
       setOutputText(
         "Displaying guide for: " + " " + colorKeyword + " " + fontKeyword
       );
+      setFormState({
+        color1: colorScheme[0],
+        color2: colorScheme[1],
+        color3: colorScheme[2],
+        color4: colorScheme[3],
+        headerFont: font,
+        subFont: checkSerif(style),
+        style: style,
+      });
     }
 
-    setFormState({
-      color1: colorScheme[0],
-      color2: colorScheme[1],
-      color3: colorScheme[2],
-      color4: colorScheme[3],
-      headerFont: font,
-      subFont: checkSerif(style),
-      style: style,
-    });
+    // setFormState({
+    //   color1: colorScheme[0],
+    //   color2: colorScheme[1],
+    //   color3: colorScheme[2],
+    //   color4: colorScheme[3],
+    //   headerFont: font,
+    //   subFont: checkSerif(style),
+    //   style: style,
+    // });
   }
 
   function checkSerif(style: string) {

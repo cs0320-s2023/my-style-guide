@@ -87,10 +87,10 @@ public class TestColor {
    */
   @Test
   public void missingParams() throws IOException {
-    ColorHandler.FailureResponse response = makeAPICall("color?col=", ColorHandler.FailureResponse.class);
+    ColorHandler.FailureResponse response = makeAPICall("color?keyword=", ColorHandler.FailureResponse.class);
     assertNotNull(response);
     assertEquals("error_bad_request", response.result());
-    assertEquals("Please enter keyword for color scheme", response.error_message());
+    assertEquals("Please enter keyword for color scheme.", response.error_message());
   }
 
   /**
@@ -99,10 +99,10 @@ public class TestColor {
    */
   @Test
   public void invalidParam() throws IOException {
-    ColorHandler.FailureResponse response = makeAPICall("color?col=telson", ColorHandler.FailureResponse.class);
+    ColorHandler.FailureResponse response = makeAPICall("color?keyword=telson", ColorHandler.FailureResponse.class);
     assertNotNull(response);
     assertEquals("error_bad_request", response.result());
-    assertEquals("Try a different keyword", response.error_message());
+    assertEquals("Try a different keyword for your color!", response.error_message());
   }
 
   /**
@@ -112,7 +112,7 @@ public class TestColor {
   @Test
   public void validNounParam() throws IOException {
     String param = "blue";
-    ColorHandler.SuccessResponse response = makeAPICall("color?col="+param, ColorHandler.SuccessResponse.class);
+    ColorHandler.SuccessResponse response = makeAPICall("color?keyword="+param, ColorHandler.SuccessResponse.class);
     assertEquals("success", response.result());
     assertNotNull(response.val());
     assertTrue(valInExpectedRange(param, response.val()));
@@ -125,7 +125,7 @@ public class TestColor {
   @Test
   public void validMeaningParam() throws IOException {
     String param = "power";
-    ColorHandler.SuccessResponse response = makeAPICall("color?col="+param, ColorHandler.SuccessResponse.class);
+    ColorHandler.SuccessResponse response = makeAPICall("color?keyword="+param, ColorHandler.SuccessResponse.class);
     assertEquals("success", response.result());
     assertNotNull(response.val());
     assertTrue(valInExpectedRange(param, response.val()));
@@ -138,7 +138,7 @@ public class TestColor {
   @Test
   public void validUsageParam() throws IOException {
     String param = "health";
-    ColorHandler.SuccessResponse response = makeAPICall("color?col="+param, ColorHandler.SuccessResponse.class);
+    ColorHandler.SuccessResponse response = makeAPICall("color?keyword="+param, ColorHandler.SuccessResponse.class);
     assertEquals("success", response.result());
     assertNotNull(response.val());
     assertTrue(valInExpectedRange(param, response.val()));

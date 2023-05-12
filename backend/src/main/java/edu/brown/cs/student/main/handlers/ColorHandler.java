@@ -50,10 +50,9 @@ public class ColorHandler implements Route {
 
     String colorQuery = this.getColorFromInput(colorKeyword);
     if (colorQuery == null) {
-      return new FailureResponse("error_bad_request", "Try a different color keyword!").serialize();
+      return new FailureResponse("error_bad_request", "Try a different keyword for your color!").serialize();
     }
     try {
-//      ColorScheme res = this.getColorScheme(colorKeyword, "monochrome", 4);
       return new SuccessResponse(colorQuery).serialize();
     } catch (JsonDataException e) {
       System.out.println("Error message: " + e.getMessage());

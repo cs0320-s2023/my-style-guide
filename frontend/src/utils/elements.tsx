@@ -40,7 +40,7 @@ export function callAPI(url: string): Promise<string> {
       .then((response) => response.json())
       .then((json) => {
         // console.log(json);
-        if (isLoadSuccessRes(json)) {
+        if (isColorSuccessRes(json)) {
           console.log("success response");
           console.log(json.val);
           resolve(json.val);
@@ -60,9 +60,17 @@ export function callAPI(url: string): Promise<string> {
 /**
  * Interface for a successful response
  */
-interface LoadSuccessResponse {
+interface ColorSuccessResponse {
   result: string;
   val: string;
+}
+
+/**
+ * Interface for a successful response
+ */
+interface FontSuccessResponse {
+  font: string;
+  style: string;
 }
 
 /**
@@ -74,13 +82,24 @@ interface LoadFailureResponse {
 }
 
 /**
- * Function for a successful load response
+ * Function for a successful load response on color query
  * @param rjson - JSON response from the backend
  * @returns - boolean, true if the response is a LoadSuccessResponse
  */
-export function isLoadSuccessRes(rjson: any): rjson is LoadSuccessResponse {
+export function isColorSuccessRes(rjson: any): rjson is ColorSuccessResponse {
   if (!("result" in rjson)) return false;
   if (!("val" in rjson)) return false;
+  return true;
+}
+
+/**
+ * Function for a successful load response on font query
+ * @param rjson - JSON response from the backend
+ * @returns - boolean, true if the response is a LoadSuccessResponse
+ */
+export function isFontSuccessRes(rjson: any): rjson is FontSuccessResponse {
+  if (!("font" in rjson)) return false;
+  if (!("style" in rjson)) return false;
   return true;
 }
 
