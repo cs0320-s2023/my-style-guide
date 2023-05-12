@@ -38,11 +38,105 @@ describe("render colors", () => {
   });
 });
 
+test("no input search", async () => {
+  let user = userEvent.setup();
+  await user.click(button);
+  expect(
+    await screen.getByText("Invalid input: Please enter exactly two (2) keywords."))
+    .toBeInTheDocument();
+});
+
+test("one word input search", async () => {
+  let user = userEvent.setup();
+  await user.type(input, "blue");
+  await user.click(button);
+  expect(
+    await screen.getByText("Invalid input: Please enter exactly two (2) keywords."))
+    .toBeInTheDocument();
+});
+
+test("invalid color input", async () => {
+  let user = userEvent.setup();
+  await user.type(input, "key silly");
+  await user.click(button);
+  expect(
+    await screen.findByText("Error - Invalid input: Try a different keyword for your color!")
+  ).toBeInTheDocument();
+
+});
+
+test("invalid color input", async () => {
+  let user = userEvent.setup();
+  await user.type(input, "Blue silly");
+  await user.click(button);
+  expect(
+    await screen.findByText("Error - Invalid input: Try a different keyword for your color!")
+  ).toBeInTheDocument();
+
+});
+
+test("space as color input", async () => {
+  let user = userEvent.setup();
+  await user.type(input, " blue");
+  await user.click(button);
+  expect(
+    await screen.findByText("Error - Please enter keyword for color scheme.")
+  ).toBeInTheDocument();
+
+});
+
+test("color input not in color library", async () => {
+  let user = userEvent.setup();
+  await user.type(input, "mauve silky");
+  await user.click(button);
+  expect(
+    await screen.findByText("Error - Invalid input: Try a different keyword for your color!")
+  ).toBeInTheDocument();
+
+});
+
+test("text while searching", async () => {
+  let user = userEvent.setup();
+  await user.type(input, "green smooth");
+  await user.click(button);
+  expect(
+    await screen.findByText("Waiting for response...")
+  ).toBeInTheDocument();
+});
+
+
 test("user input valid", async () => {
   let user = userEvent.setup();
   await user.type(input, "red hi");
   await user.click(button);
-  expect(
-    await screen.findByText("Displaying style guide for: red hi")
-  ).toBeInTheDocument();
+  expect(await setTimeout(async () => {
+    expect(screen.findByText("Search complete!")).toBeInTheDocument();
+  }, 5000));
+expect(await setTimeout(async () => {
+  expect(screen.findByText("Displaying style guide for: red hi")).toBeInTheDocument();
+}, 5000));
 });
+
+test("multiple searches", async () => {
+  let user = userEvent.setup();
+  await user.type(input, "red hi");
+  await user.click(button);
+  expect(await setTimeout(async () => {
+    expect(screen.findByText("Search complete!")).toBeInTheDocument();
+  }, 5000));
+expect(await setTimeout(async () => {
+  expect(screen.findByText("Displaying style guide for: red hi")).toBeInTheDocument();
+}, 5000));
+await user.type(input, "blue silky");
+  await user.click(button);
+  expect(await setTimeout(async () => {
+    expect(screen.findByText("Search complete!")).toBeInTheDocument();
+  }, 5000));
+expect(await setTimeout(async () => {
+  expect(screen.findByText("Displaying style guide for: blue silky")).toBeInTheDocument();
+}, 5000));
+});
+
+
+
+
