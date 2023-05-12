@@ -36,7 +36,6 @@ public class FontHandler implements Route {
     public String fontify(Request request) throws Exception {
         String url = "https://api.openai.com/v1/completions";
         String descriptor = request.queryParams("adj");
-        System.out.println(descriptor);
         HttpURLConnection gpt = (HttpURLConnection) new URL(url).openConnection();
 
 
@@ -67,9 +66,7 @@ public class FontHandler implements Route {
     }
 
     public String fontInfo(String gptFont, Request request) throws Exception {
-        System.out.println(gptFont);
         String font = gptFont.trim().replace(" ","+").replace("\"", "").replace("'", "");
-        System.out.println(font);
         String url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCj_Mhke0zUczf0viyXaHvAgrwn_ww3288&family="+font;
         try{
             HttpURLConnection fontConnection = (HttpURLConnection) new URL(url).openConnection();
@@ -95,7 +92,7 @@ public class FontHandler implements Route {
                 this.fontInfo(this.fontify(request), request);
                 this._gptCount++;
             }
-            return new FontFailureResponse("Error","Error: Try using another keyword for your font!").serialize();
+            return new FontFailureResponse("Error","Invalid input: Try using another keyword for your font!").serialize();
         }
 
     }

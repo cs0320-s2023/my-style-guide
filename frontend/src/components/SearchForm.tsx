@@ -43,7 +43,8 @@ export default function SearchForm(props: SearchFormProps) {
    * Sets the style guide based on the search data using the keyword
    */
   async function handleSearch(content: string) {
-    props.setHex([]);
+    // props.setHex([]);
+    setOutputText("Waiting for response...");
     let tokens = content.split(" ");
     
     if (tokens.length != 2) {
@@ -98,8 +99,9 @@ export default function SearchForm(props: SearchFormProps) {
       props.setHex(colorScheme);
       props.setFont(font);
       props.setSerif(style);
-      setOutputText(
-        "Displaying guide for: " + " " + colorKeyword + " " + fontKeyword
+      setOutputText("Search complete!")
+      setDataText(
+        "Displaying style guide for: " + " " + colorKeyword + " " + fontKeyword
       );
       setFormState({
         color1: colorScheme[0],
@@ -111,16 +113,6 @@ export default function SearchForm(props: SearchFormProps) {
         style: style,
       });
     }
-
-    // setFormState({
-    //   color1: colorScheme[0],
-    //   color2: colorScheme[1],
-    //   color3: colorScheme[2],
-    //   color4: colorScheme[3],
-    //   headerFont: font,
-    //   subFont: checkSerif(style),
-    //   style: style,
-    // });
   }
 
   function checkSerif(style: string) {
@@ -177,8 +169,8 @@ export default function SearchForm(props: SearchFormProps) {
           g<span className="logo-flair">Ui</span>de
         </h3>
         <h4>
-          Create a unique UI style guide with guide! Just input a desired{" "}
-          <b>color</b> and <b>vibe</b> to get a custom ui with colors and fonts.
+          Create a unique UI style guide with this simple search site! Just input a desired{" "}
+          <b>color</b> and <b>vibe</b> to generate a custom UI with colors and fonts.
         </h4>
         <h4>
           For example: <b>red professional</b>

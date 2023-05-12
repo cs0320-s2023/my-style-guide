@@ -80,6 +80,30 @@ public class TestColor {
     assertEquals("rgb(0, 71, 171)", res.rgbVals().value());
   }
 
+  @Test
+  public void testColorDesc() throws IOException {
+    ColorProxy proxy = new ColorProxy();
+    Description desc = proxy.fromJson(Description.class, ColorMocks.BLUE_DESC);
+    assertEquals(1, desc.nouns().size());
+    assertEquals("blue", desc.nouns().get(0));
+  }
+
+  @Test
+  public void testColorMeaning() throws IOException {
+    ColorProxy proxy = new ColorProxy();
+    Description desc = proxy.fromJson(Description.class, ColorMocks.BLUE_DESC);
+    assertEquals(8, desc.meanings().size());
+    assertEquals("trust", desc.meanings().get(0));
+  }
+
+  @Test
+  public void testColorUsage() throws IOException {
+    ColorProxy proxy = new ColorProxy();
+    Description desc = proxy.fromJson(Description.class, ColorMocks.BLUE_DESC);
+    assertEquals(5, desc.usage().size());
+    assertEquals("finance", desc.usage().get(1));
+  }
+
   // ---------------------- INTEGRATION TESTS ----------------------
   /**
    * Tests server call to color search with a missing parameter

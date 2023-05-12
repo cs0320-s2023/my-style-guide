@@ -43,6 +43,6 @@ test("user input valid", async () => {
   await user.type(input, "red hi");
   await user.click(button);
   expect(
-    await screen.findByText("Currently generating a style guide for: red hi")
+    await screen.findByText("Displaying style guide for: red hi")
   ).toBeInTheDocument();
 });

@@ -4,7 +4,6 @@ import com.squareup.moshi.JsonDataException;
 import edu.brown.cs.student.main.jsonUtils.*;
 import edu.brown.cs.student.main.jsonUtils.ColorDescRecords.ColorDescJSON;
 import edu.brown.cs.student.main.jsonUtils.ColorDescRecords.Description;
-import edu.brown.cs.student.main.jsonUtils.ColorResponseJSON.ColorScheme;
 import edu.brown.cs.student.main.proxy.ColorProxy;
 import java.util.ArrayList;
 import java.util.List;
