@@ -7,6 +7,7 @@ import edu.brown.cs.student.main.jsonUtils.ColorResponseJSON;
 import edu.brown.cs.student.main.proxy.ColorProxy;
 import edu.brown.cs32.student.mocks.ColorMocks;
 import okio.Buffer;
+import org.eclipse.jetty.util.IO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,8 +21,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFont {
 
@@ -69,6 +69,8 @@ public class TestFont {
         return response;
     }
 
+    // ---------------------- UNIT TESTS ----------------------
+
     @Test
     public void testSerifs() throws Exception {
         FontHandler fonthandler = new FontHandler();
@@ -90,5 +92,56 @@ public class TestFont {
         assertTrue(fonthandler.fontInfo("abcdefg", "7777").contains("style"));
         assertTrue(fonthandler.fontInfo("1*fhe$", "hello world").contains("style"));
     }
+
+    /**
+     * Test the responses from the fontify method
+     * @throws Exception
+     */
+    @Test
+    public void testFontify() throws Exception {
+        FontHandler fonthandler = new FontHandler();
+        // normal inputs
+        assertNotNull(fonthandler.fontify("smooth"));
+        assertNotNull(fonthandler.fontify("professional"));
+        assertNotNull(fonthandler.fontify("weird"));
+        assertNotNull(fonthandler.fontify("blue"));
+        // edge cases
+        assertNotNull(fonthandler.fontify(" "));
+        assertNotNull(fonthandler.fontify(""));
+
+    }
+
+    // ---------------------- INTEGRATION TESTS ----------------------
+
+    /**
+     * Test server call to fonthandler with missing parameter
+     * @throws IOException
+     */
+    @Test
+    public void missingParams() throws IOException {
+        FontHandler.FontFailureResponse response = makeAPICall("font?adj=", FontHandler.FontFailureResponse.class);
+        String responseError = response.result();
+        String responseMessage = response.error_message();
+        assertNotNull(response);
+        assertEquals(responseError, response.result());
+        assertEquals(responseMessage, response.error_message());
+    }
+
+    /**
+     * Test server call to fonthandler with valid parameter
+     * @throws IOException
+     */
+    @Test
+    public void validParams() throws IOException {
+        String param = "smooth";
+        FontHandler.FontSuccessResponse response = makeAPICall("font?adj="+param, FontHandler.FontSuccessResponse.class);
+        String font = response.font();
+        String style = response.style();
+        assertNotNull(response);
+        assertEquals(font, response.font());
+        assertEquals(style, response.style());
+    }
+
+
 
 }
