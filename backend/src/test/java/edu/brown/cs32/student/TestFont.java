@@ -90,5 +90,5 @@ public class TestFont {
         assertTrue(fonthandler.fontInfo("  Open Sans").contains("Open+Sans"));
         assertTrue(fonthandler.fontInfo("Open+Sans").contains("Open+Sans"));
     }
-    
+
 }
