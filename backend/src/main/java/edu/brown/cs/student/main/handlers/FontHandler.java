@@ -20,11 +20,13 @@ import java.util.Map;
 
 public class FontHandler implements Route {
     public int _gptCount = 0;
+    public Request _request;
 
     @Override
     public Object handle(Request request, Response response) {
+        this._request = request;
         try {
-            return this.fontInfo(this.fontify(request), request);
+            return this.fontInfo(this.fontify(request));
         } catch (Exception e) {
             Map<String, Object> map = new HashMap<>();
             map.put("result", "error_bad_json");
@@ -65,7 +67,7 @@ public class FontHandler implements Route {
         return output;
     }
 
-    public String fontInfo(String gptFont, Request request) throws Exception {
+    public String fontInfo(String gptFont) throws Exception {
         String font = gptFont.trim().replace(" ","+").replace("\"", "").replace("'", "");
         String url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCj_Mhke0zUczf0viyXaHvAgrwn_ww3288&family="+font;
         try{
@@ -89,7 +91,7 @@ public class FontHandler implements Route {
         } catch (Exception e) {
 
             if(this._gptCount <4){
-                this.fontInfo(this.fontify(request), request);
+                this.fontInfo(this.fontify(this._request));
                 this._gptCount++;
             }
             return new FontFailureResponse("Error","Invalid input: Try using another keyword for your font!").serialize();
