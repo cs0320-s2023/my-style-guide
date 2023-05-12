@@ -72,23 +72,23 @@ public class TestFont {
     @Test
     public void testSerifs() throws Exception {
         FontHandler fonthandler = new FontHandler();
-        assertTrue(fonthandler.fontInfo("Abel").contains("sans-serif"));
+        assertTrue(fonthandler.fontInfo("Abel", "prompt").contains("sans-serif"));
     }
 
     @Test
     public void testSpellingError() throws Exception {
         FontHandler fonthandler = new FontHandler();
-        assertTrue(fonthandler.fontInfo("Open Sans").contains("Open+Sans"));
-        assertTrue(fonthandler.fontInfo("  Open Sans").contains("Open+Sans"));
-        assertTrue(fonthandler.fontInfo("Open+Sans").contains("Open+Sans"));
+        assertTrue(fonthandler.fontInfo("Open Sans", "prompt").contains("Open+Sans"));
+        assertTrue(fonthandler.fontInfo("  Open Sans", "prompt").contains("Open+Sans"));
+        assertTrue(fonthandler.fontInfo("Open+Sans", "prompt").contains("Open+Sans"));
     }
 
     @Test
     public void testUnknownFont() throws Exception {
         FontHandler fonthandler = new FontHandler();
-        assertTrue(fonthandler.fontInfo("Open Sans").contains("Open+Sans"));
-        assertTrue(fonthandler.fontInfo("  Open Sans").contains("Open+Sans"));
-        assertTrue(fonthandler.fontInfo("Open+Sans").contains("Open+Sans"));
+        assertTrue(fonthandler.fontInfo("bubbles", "rugged").contains("style"));
+        assertTrue(fonthandler.fontInfo("abcdefg", "7777").contains("style"));
+        assertTrue(fonthandler.fontInfo("1*fhe$", "hello world").contains("style"));
     }
 
 }

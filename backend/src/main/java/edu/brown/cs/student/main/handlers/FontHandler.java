@@ -20,13 +20,12 @@ import java.util.Map;
 
 public class FontHandler implements Route {
     public int _gptCount = 0;
-    public Request _request;
 
     @Override
     public Object handle(Request request, Response response) {
-        this._request = request;
+        String descriptor = request.queryParams("adj");
         try {
-            return this.fontInfo(this.fontify(request));
+            return this.fontInfo(this.fontify(descriptor), descriptor);
         } catch (Exception e) {
             Map<String, Object> map = new HashMap<>();
             map.put("result", "error_bad_json");
@@ -35,9 +34,8 @@ public class FontHandler implements Route {
         }
     }
 
-    public String fontify(Request request) throws Exception {
+    public String fontify(String descriptor) throws Exception {
         String url = "https://api.openai.com/v1/completions";
-        String descriptor = request.queryParams("adj");
         HttpURLConnection gpt = (HttpURLConnection) new URL(url).openConnection();
 
 
@@ -67,8 +65,9 @@ public class FontHandler implements Route {
         return output;
     }
 
-    public String fontInfo(String gptFont) throws Exception {
+    public String fontInfo(String gptFont, String descriptor) throws Exception {
         String font = gptFont.trim().replace(" ","+").replace("\"", "").replace("'", "");
+        System.out.println(font);
         String url = "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyCj_Mhke0zUczf0viyXaHvAgrwn_ww3288&family="+font;
         try{
             HttpURLConnection fontConnection = (HttpURLConnection) new URL(url).openConnection();
@@ -89,12 +88,12 @@ public class FontHandler implements Route {
             return new FontSuccessResponse(font,fontResponse.items.get(0).category).serialize();
 
         } catch (Exception e) {
-
             if(this._gptCount <4){
-                this.fontInfo(this.fontify(this._request));
                 this._gptCount++;
+                return this.fontInfo(this.fontify(descriptor), descriptor);
+            }else{
+                return new FontFailureResponse("Error","Invalid input: Try using another keyword for your font!").serialize();
             }
-            return new FontFailureResponse("Error","Invalid input: Try using another keyword for your font!").serialize();
         }
 
     }
