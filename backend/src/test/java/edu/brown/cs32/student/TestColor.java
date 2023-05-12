@@ -239,7 +239,7 @@ public class TestColor {
     ColorHandler.FailureResponse response = makeAPICall("color?keyword=telson", ColorHandler.FailureResponse.class);
     assertNotNull(response);
     assertEquals("error_bad_request", response.result());
-    assertEquals("Try a different keyword for your color!", response.error_message());
+    assertEquals("Invalid input: Try a different keyword for your color!", response.error_message());
   }
 
   /**

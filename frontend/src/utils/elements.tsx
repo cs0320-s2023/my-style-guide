@@ -41,18 +41,15 @@ export function callAPI(url: string): Promise<string> {
       .then((json) => {
         // console.log(json);
         if (isColorSuccessRes(json)) {
-          console.log("success response");
-          console.log(json.val);
           resolve(json.val);
         } else if (isLoadFailRes(json)) {
-          console.log("failure response");
           resolve(json.error_message);
         } else {
           resolve("Return type was not a valid response type.");
         }
       })
       .catch((e) => {
-        resolve(e.message);
+        resolve("Server not available at this time");
       });
   });
 }

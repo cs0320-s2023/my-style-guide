@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface SearchBoxProps {
   onSearch: (keyword: string) => void;
@@ -8,6 +8,18 @@ interface SearchBoxProps {
  */
 function SearchBox(props: SearchBoxProps) {
   const [query, setQuery] = useState("");
+  const keywordInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const focusKeyword = (event: KeyboardEvent) => {
+      if (event.key === "Control") {
+        if (keywordInputRef.current !== null) {
+          keywordInputRef.current.focus();
+        }
+      }
+    };
+    window.addEventListener("keydown", focusKeyword);
+  });
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -32,6 +44,7 @@ function SearchBox(props: SearchBoxProps) {
         placeholder="Enter search keywords here."
         value={query}
         onChange={handleInput}
+        ref={keywordInputRef}
       />
       <button
         role="button"

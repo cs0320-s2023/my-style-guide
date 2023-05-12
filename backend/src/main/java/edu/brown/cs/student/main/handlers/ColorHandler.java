@@ -49,7 +49,7 @@ public class ColorHandler implements Route {
 
     String colorQuery = this.getColorFromInput(colorKeyword);
     if (colorQuery == null) {
-      return new FailureResponse("error_bad_request", "Try a different keyword for your color!").serialize();
+      return new FailureResponse("error_bad_request", "Invalid input: Try a different keyword for your color!").serialize();
     }
     try {
       return new SuccessResponse(colorQuery).serialize();
