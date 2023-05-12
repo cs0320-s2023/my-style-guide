@@ -8,7 +8,7 @@
 
 **GitHub Repo:** https://github.com/cs0320-s2023/my-style-guide
 
-**Time Spent:** ~20 hours
+**Time Spent:** 20 hours each
 
 ## Design choices:
 
@@ -22,14 +22,24 @@ The back end contains two main route handlers, a proxy handler, as well as a top
 
 
 ## Errors/Bugs:
-No errors found in latest commit.
 
 ## Tests:
 
-For testing the front end, we used the react testing library to check that each color element was being displayed correctly without crashing.
+For testing the front end, we used the react testing library to check that each component gets rendered correctly without crashing. We also checked text content on the screen for different keyword inputs.
 
-On the back end, we used both unit and integration testing. For unit testing, that the RGB values would be correct for a certain color id. For integration testing, we gave sample to the colorHandler and checked the functionality and error handling of the class.
+On the back end, we used both unit and integration testing. For unit testing, we tested the helper methods for edge cases that could cause problems later on and we tested our proxy class to ensure that valid RGB values were being returned. For integration testing, we gave sample to the colorHandler and checked valid inputs as well as input that would throw error messages.
 
+To run test for frontend:
+```
+cd frontend
+npm test
+```
+
+To run test for backend
+```
+cd backend
+mvn test
+```
 ## How to run:
 
 Open Server.java in backend and click run. The message "Server Started" should be printed in terminal.
@@ -43,3 +53,8 @@ cd frontend
 npm run dev
 
 ```
+
+Open localhost:5173 in your browser to use program.
+
+
+
