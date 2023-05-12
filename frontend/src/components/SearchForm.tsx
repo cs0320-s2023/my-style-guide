@@ -141,7 +141,7 @@ export default function SearchForm(props: SearchFormProps) {
     <div>
       <div className="left-container">
         <h3>
-          my_style.g<span className="logo-flair">Ui</span>de
+          g<span className="logo-flair">Ui</span>de
         </h3>
         <h4>
           Create a unique UI style guide with this simple search site! Just input a desired{" "}
