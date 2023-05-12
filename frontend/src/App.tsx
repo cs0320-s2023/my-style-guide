@@ -11,11 +11,13 @@ function App() {
     "#000000",
   ]);
   const [font, setFont] = useState("Inter");
+  const [subFont, setSubFont] = useState("Inter");
   const [serif, setSerif] = useState("sans-serif");
   const [url, setUrl] = useState("https://fonts.googleapis.com/css?family=inter")
 
 
   useEffect(() => {
+    setUrl("https://fonts.googleapis.com/css?family=" + subFont);
     setUrl("https://fonts.googleapis.com/css?family=" + font);
   },[font]);
 
@@ -28,10 +30,12 @@ function App() {
       <SearchForm
         hex={hex}
         setHex={setHex}
+        subFont={subFont}
         font={font}
         serif={serif}
         setSerif={setSerif}
         setFont={setFont}
+        setSubFont={setSubFont}
       />
       <StyleGuideBox hex={hex} font={font} serif={serif} />
     </div>

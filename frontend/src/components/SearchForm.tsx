@@ -7,9 +7,11 @@ interface SearchFormProps {
   hex: string[];
   setHex: React.Dispatch<React.SetStateAction<string[]>>;
   font: string;
+  subFont: string;
   serif: string;
   setSerif: React.Dispatch<React.SetStateAction<string>>;
   setFont: React.Dispatch<React.SetStateAction<string>>;
+  setSubFont: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // Function to render a form that contains an input box and a submit button
@@ -63,11 +65,13 @@ export default function SearchForm(props: SearchFormProps) {
     } 
     const parsedFont: string = fontJson.font;
     const font: string = parsedFont.split("+").join(" ");
+    const subFont: string = checkSerif(fontJson.style);
     const style: string = fontJson.style;
 
     if (isNumeric(colorResponseJson) && (!(isLoadFailRes(fontJson)))) {
       props.setHex(colorScheme);
       props.setFont(font);
+      props.setSubFont(subFont);
       props.setSerif(style);
       setOutputText("Search complete!")
       setDataText(
@@ -79,13 +83,14 @@ export default function SearchForm(props: SearchFormProps) {
         color3: colorScheme[2],
         color4: colorScheme[3],
         headerFont: font,
-        subFont: checkSerif(style),
+        subFont: subFont,
         style: style,
       });
     }
   }
 
   function checkSerif(style: string) {
+    console.log(style);
     if (style == "sans-serif") {
       return props.font;
     } else {

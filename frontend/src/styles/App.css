@@ -85,7 +85,7 @@ button {
   width: 100%;
   border-radius: 5px;
   border-width: 0px;
-  background: rgb(66, 116, 243);
+  background: var(--color-swatch-1);
   text-shadow: 0;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -94,7 +94,7 @@ button {
 
 button:hover {
   color: #fff;
-  background: rgb(40, 98, 247);
+  opacity: 80%;
 }
 
 .button-primary {
@@ -404,13 +404,13 @@ button:hover {
 }
 
 .typography-3 {
-  font-family: var(--header), var(--style);
+  font-family: var(--body), var(--style);
   font-size: 20px;
   text-align: start;
 }
 
 .typography-4 {
-  font-family: var(--header), var(--style);
+  font-family: var(--body), var(--style);
   font-size: 16px;
   text-align: start;
 }
