@@ -3,6 +3,7 @@ import "./styles/App.css";
 import StyleGuideBox from "./components/StyleGuideBox";
 import SearchForm from "./components/SearchForm";
 
+
 function App() {
   const [hex, setHex] = useState<string[]>([
     "#000000",
@@ -17,8 +18,7 @@ function App() {
 
 
   useEffect(() => {
-    setUrl("https://fonts.googleapis.com/css?family=" + subFont);
-    setUrl("https://fonts.googleapis.com/css?family=" + font);
+    setUrl("https://fonts.googleapis.com/css?family=" + subFont+"|"+font+"|inter");
   },[font]);
 
   return (
